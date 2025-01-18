@@ -4,7 +4,7 @@
 
 html,
 body {
-  @apply bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white/80 dark:selection:bg-cyan-900;
+  @apply bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white/80 dark:selection:bg-cyan-900 duration-150 transition-colors;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
