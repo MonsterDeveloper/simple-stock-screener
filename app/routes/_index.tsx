@@ -13,7 +13,7 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function IndexPage({ loaderData }: Route.ComponentProps) {
-  return <main className="max-w-4xl mx-auto mt-40">
+  return <main className="max-w-4xl mx-auto mt-40 px-4">
   <h1 className="text-3xl font-bold">Simple Stock Screener</h1>
 
   <p className="mt-5">
