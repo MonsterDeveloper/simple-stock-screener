@@ -5,7 +5,7 @@ main = "./build/server/index.js"
 assets = { directory = "./build/client/" }
 
 routes = [
-  { pattern = "simple-stock-screener.cto-of-everything.dev", custom_domain = true }
+  { pattern = "simple-stock-screener.ctoofeverything.dev", custom_domain = true }
 ]
 
 [observability]
