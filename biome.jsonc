@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["@cto_of_everything/biome-config"],
+  "files": {
+    "ignore": [
+      ".react-router/**/*",
+      "worker-configuration.d.ts",
+      "build/**/*",
+      "app/entry.server.tsx"
+    ]
+  },
+  "linter": {
+    "rules": {
+      "nursery": {
+        "useSortedClasses": "error"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "include": ["app/routes/**/*", "app/root.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
+          }
+        }
+      }
+    }
+  ]
+}
