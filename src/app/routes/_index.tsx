@@ -143,7 +143,7 @@ export default function IndexPage() {
         @QCompounding on X{" "}
         <IconExternalLink className="ml-0.5 inline-block size-4 align-middle" />
       </a>
-      <div className="flex flex-row items-start justify-start">
+      <div className="mt-4 flex flex-row items-start justify-start">
         <Popover open={isSortPopoverOpen} onOpenChange={setIsSortPopoverOpen}>
           <PopoverTrigger className="flex h-6 flex-row items-center justify-center rounded-full border border-blue-300 bg-blue-50/50 px-2 text-blue-500 text-sm transition-colors duration-100 hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 dark:border-blue-500/50 dark:bg-blue-500/10 dark:hover:bg-blue-500/20">
             {table.getState().sorting.length === 1 ? (

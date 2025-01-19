@@ -16,9 +16,19 @@
       }
     }
   },
+  "javascript": {
+    "globals": ["Env", "ExecutionContext", "ExportedHandler"]
+  },
   "overrides": [
     {
-      "include": ["app/routes/**/*", "app/root.tsx"],
+      "include": [
+        "src/app/routes/**/*",
+        "src/app/root.tsx",
+        "src/app/routes.ts",
+        "tailwind.config.ts",
+        "react-router.config.ts",
+        "workers/app.ts"
+      ],
       "linter": {
         "rules": {
           "style": {
