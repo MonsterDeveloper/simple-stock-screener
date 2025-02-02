@@ -4,6 +4,7 @@ import autoprefixer from "autoprefixer"
 import tailwindcss from "tailwindcss"
 import { defineConfig } from "vite"
 import tsconfigPaths from "vite-tsconfig-paths"
+import { getLoadContext } from "./load-context"
 
 export default defineConfig(({ isSsrBuild }) => ({
   build: {
@@ -20,9 +21,7 @@ export default defineConfig(({ isSsrBuild }) => ({
   },
   plugins: [
     cloudflareDevProxy({
-      getLoadContext({ context }) {
-        return { cloudflare: context.cloudflare }
-      },
+      getLoadContext,
     }),
     reactRouter(),
     tsconfigPaths(),

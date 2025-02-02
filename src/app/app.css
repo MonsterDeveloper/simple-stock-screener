@@ -6,6 +6,8 @@ html,
 body {
   @apply bg-white text-zinc-800 dark:bg-zinc-900 dark:text-white/80 dark:selection:bg-cyan-900 duration-150 transition-colors;
 
+  font-feature-settings: "liga" 1, "calt" 1;
+
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }

@@ -5,6 +5,7 @@ export default {
   content: [
     "./src/app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}",
     "./src/shared/ui/**/*.tsx",
+    "./src/widgets/**/*.tsx",
   ],
   theme: {
     extend: {

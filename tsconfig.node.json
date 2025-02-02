@@ -1,6 +1,14 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["tailwind.config.ts", "vite.config.ts"],
+  "include": [
+    "tailwind.config.ts",
+    "vite.config.ts",
+    "src/shared/config/drizzle-kit.ts",
+    "src/shared/lib/database.ts",
+    "src/shared/lib/id.ts",
+    "load-context.ts",
+    "worker-configuration.d.ts"
+  ],
   "compilerOptions": {
     "composite": true,
     "strict": true,

@@ -12,17 +12,26 @@
   "linter": {
     "rules": {
       "nursery": {
-        "useSortedClasses": "error"
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "error"
+        }
       }
     }
   },
   "javascript": {
-    "globals": ["Env", "ExecutionContext", "ExportedHandler"]
+    "globals": [
+      "Env",
+      "ExecutionContext",
+      "ExportedHandler",
+      "CloudflareEnvironment"
+    ]
   },
   "overrides": [
     {
       "include": [
         "src/app/routes/**/*",
+        "src/shared/config/**/drizzle-kit.ts",
         "src/app/root.tsx",
         "src/app/routes.ts",
         "tailwind.config.ts",
@@ -33,6 +42,19 @@
         "rules": {
           "style": {
             "noDefaultExport": "off"
+          }
+        }
+      }
+    },
+    {
+      "include": [
+        "src/app/routes/api.inngest/process-ticker.ts",
+        "src/shared/lib/financial-datasets.server.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
           }
         }
       }

@@ -10,5 +10,8 @@
   "[json][javascript][javascriptreact][typescript][typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "typescript.preferences.autoImportFileExcludePatterns": ["@radix-ui/**"]
+  "typescript.preferences.autoImportFileExcludePatterns": ["@radix-ui/**"],
+  "search.exclude": {
+    "**/.react-router/**": true
+  }
 }
