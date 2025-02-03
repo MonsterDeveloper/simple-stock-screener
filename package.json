@@ -3,17 +3,24 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
+    "build": "bun biome ci && bun typecheck && bun react-router build",
     "dev": "react-router dev",
     "start": "wrangler dev",
+
     "update": "bunx npm-check-updates -ui --reject bun",
     "wrangler:typegen": "wrangler types",
+
     "db:studio": "drizzle-kit studio --config ./src/shared/config/drizzle-kit.ts",
     "db:generate": "drizzle-kit generate --config ./src/shared/config/drizzle-kit.ts",
     "db:push": "drizzle-kit push --config ./src/shared/config/drizzle-kit.ts",
+    "db:migrate": "wrangler d1 migrations apply simple-stock-screener --remote",
+
     "inngest:dev": "inngest-cli dev --no-discovery -u http://localhost:5173/api/inngest",
+
     "typecheck": "react-router typegen && tsc -b",
-    "check": "biome check --write"
+    "check": "biome check --write",
+
+    "deploy": "bun db:migrate && bun wrangler deploy"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.1.9",
@@ -33,14 +40,14 @@
     "@react-router/serve": "^7.1.5",
     "@tabler/icons-react": "^3.29.0",
     "@tanstack/react-table": "^8.20.6",
-    "ai": "^4.1.16",
+    "ai": "^4.1.17",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.39.1",
     "inngest": "^3.31.3",
     "isbot": "^5.1.22",
     "marked": "^15.0.6",
-    "motion": "^12.0.6",
+    "motion": "^12.0.8",
     "nanoid": "^5.0.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

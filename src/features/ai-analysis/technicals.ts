@@ -41,7 +41,7 @@ export async function analyzeTechnicals({
   // Weights for combined signal
   const strategyWeights = {
     trend: 0.25,
-    mean_reversion: 0.2,
+    meanReversion: 0.2,
     momentum: 0.25,
     volatility: 0.15,
   }
@@ -50,7 +50,7 @@ export async function analyzeTechnicals({
   const combinedSignal = weightedSignalCombination(
     {
       trend: trendSignals,
-      mean_reversion: meanReversionSignals,
+      meanReversion: meanReversionSignals,
       momentum: momentumSignals,
       volatility: volatilitySignals,
     },
@@ -61,13 +61,13 @@ export async function analyzeTechnicals({
   return {
     signal: combinedSignal.signal,
     confidence: Math.round(combinedSignal.confidence * 100),
-    strategy_signals: {
-      trend_following: {
+    strategySignals: {
+      trendFollowing: {
         signal: trendSignals.signal,
         confidence: Math.round(trendSignals.confidence * 100),
         metrics: normalizePandas(trendSignals.metrics),
       },
-      mean_reversion: {
+      meanReversion: {
         signal: meanReversionSignals.signal,
         confidence: Math.round(meanReversionSignals.confidence * 100),
         metrics: normalizePandas(meanReversionSignals.metrics),
@@ -129,7 +129,7 @@ function calculateTrendSignals(df: ReturnType<typeof pricesToDf>) {
     confidence,
     metrics: {
       adx: lastAdx,
-      trend_strength: trendStrength,
+      trendStrength: trendStrength,
     },
   }
 }
@@ -159,7 +159,7 @@ function calculateMeanReversionSignals(df: ReturnType<typeof pricesToDf>) {
   const lastBbLower = bbLower[bbLower.length - 1]
   const lastZ = zScore[zScore.length - 1]
 
-  // price_vs_bb = (lastClose - lowerBand) / (upperBand - lowerBand)
+  // priceVsBb = (lastClose - lowerBand) / (upperBand - lowerBand)
   let priceVsBb = 0.5
   const denom = lastBbUpper - lastBbLower
   if (denom !== 0) {
@@ -180,10 +180,10 @@ function calculateMeanReversionSignals(df: ReturnType<typeof pricesToDf>) {
     signal,
     confidence,
     metrics: {
-      z_score: lastZ,
-      price_vs_bb: priceVsBb,
-      rsi_14: rsi14[rsi14.length - 1],
-      rsi_28: rsi28[rsi28.length - 1],
+      zScore: lastZ,
+      priceVsBb: priceVsBb,
+      rsi14: rsi14[rsi14.length - 1],
+      rsi28: rsi28[rsi28.length - 1],
     },
   }
 }
@@ -228,10 +228,10 @@ function calculateMomentumSignals(df: ReturnType<typeof pricesToDf>) {
     signal,
     confidence,
     metrics: {
-      momentum_1m: lastMom1m,
-      momentum_3m: lastMom3m,
-      momentum_6m: lastMom6m,
-      volume_momentum: lastVolumeMomentum,
+      momentum1m: lastMom1m,
+      momentum3m: lastMom3m,
+      momentum6m: lastMom6m,
+      volumeMomentum: lastVolumeMomentum,
     },
   }
 }
@@ -284,10 +284,10 @@ function calculateVolatilitySignals(df: ReturnType<typeof pricesToDf>) {
     signal,
     confidence,
     metrics: {
-      historical_volatility: histVol[histVol.length - 1],
-      volatility_regime: lastVolRegime,
-      volatility_z_score: lastVolZ,
-      atr_ratio: lastAtrRatio,
+      historicalVolatility: histVol[histVol.length - 1],
+      volatilityRegime: lastVolRegime,
+      volatilityZScore: lastVolZ,
+      atrRatio: lastAtrRatio,
     },
   }
 }
@@ -296,13 +296,13 @@ function calculateVolatilitySignals(df: ReturnType<typeof pricesToDf>) {
 function weightedSignalCombination(
   signals: {
     trend: { signal: string; confidence: number }
-    mean_reversion: { signal: string; confidence: number }
+    meanReversion: { signal: string; confidence: number }
     momentum: { signal: string; confidence: number }
     volatility: { signal: string; confidence: number }
   },
   weights: {
     trend: number
-    mean_reversion: number
+    meanReversion: number
     momentum: number
     volatility: number
   },
@@ -602,7 +602,9 @@ function calculateRsi(close: number[], period: number) {
 }
 
 function arrayMean(arr: number[]) {
-  if (!arr.length) return 0
+  if (!arr.length) {
+    return 0
+  }
   let s = 0
   for (const val of arr) {
     s += val

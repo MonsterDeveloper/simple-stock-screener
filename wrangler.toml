@@ -15,3 +15,4 @@ enabled = true
 binding = "DB"
 database_name = "simple-stock-screener"
 database_id = "2e183a38-13a0-46ab-954a-d5593291943d"
+migrations_dir = "drizzle-migrations"
