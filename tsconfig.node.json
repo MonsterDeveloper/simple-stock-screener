@@ -1,21 +1,40 @@
 {
   "extends": "./tsconfig.json",
   "include": [
+    "react-router.config.ts",
     "tailwind.config.ts",
     "vite.config.ts",
-    "src/shared/config/drizzle-kit.ts",
-    "src/shared/lib/database.ts",
-    "src/shared/lib/id.ts",
     "load-context.ts",
-    "worker-configuration.d.ts"
+    "worker-configuration.d.ts",
+    "src/shared/config/drizzle-kit.ts",
+    "src/shared/lib/database.ts"
   ],
   "compilerOptions": {
     "composite": true,
-    "strict": true,
     "types": ["node"],
-    "lib": ["ES2022"],
-    "target": "ES2022",
-    "module": "ES2022",
-    "moduleResolution": "bundler"
+
+    // https://www.totaltypescript.com/tsconfig-cheat-sheet
+    /* Base Options: */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+
+    /* If NOT transpiling with TypeScript: */
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+
+    /* If your code doesn't run in the DOM: */
+    "lib": ["es2022"]
   }
 }
