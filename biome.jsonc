@@ -34,7 +34,6 @@
         "src/shared/config/**/drizzle-kit.ts",
         "src/app/root.tsx",
         "src/app/routes.ts",
-        "tailwind.config.ts",
         "react-router.config.ts",
         "workers/app.ts"
       ],

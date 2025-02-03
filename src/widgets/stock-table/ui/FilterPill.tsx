@@ -81,7 +81,7 @@ export function FilterPill({ column }: { column: Column<Ticker> }) {
             ease: [0.25, 1, 0.5, 1],
           }}
           className={cn(
-            "flex h-6 flex-row items-center justify-start rounded-full border text-sm text-zinc-500 transition-colors duration-100 hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 dark:border-blue-500/50 dark:bg-blue-500/10 dark:hover:bg-blue-500/20",
+            "flex h-6 flex-row items-center justify-start rounded-full border text-sm text-zinc-500 transition-colors duration-100 hover:bg-zinc-50 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-200 dark:border-blue-500/50 dark:bg-blue-500/10 dark:hover:bg-blue-500/20",
 
             isActive
               ? "border-blue-300 bg-blue-50/50 text-blue-500"
@@ -120,7 +120,7 @@ export function FilterPill({ column }: { column: Column<Ticker> }) {
         <div className="flex flex-row items-center justify-start gap-x-0.5 text-xs text-zinc-400">
           {String(column.columnDef.header)}
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex h-4 flex-row items-center justify-center rounded-md px-0.5 text-zinc-600 transition-colors duration-75 hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200">
+            <DropdownMenuTrigger className="flex h-4 flex-row items-center justify-center rounded-md px-0.5 text-zinc-600 transition-colors duration-75 hover:bg-zinc-100 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-200">
               <span className="[&_svg]:size-2.5">
                 {filterValue && FILTER_OPERATOR_ICONS[filterValue.operator]}
               </span>
@@ -266,7 +266,7 @@ function FilterValueInput({ column }: { column: Column<Ticker> }) {
       {String(inputValue).length > 0 && (
         <button
           type="button"
-          className="-translate-y-1/2 absolute top-1/2 right-1.5 z-10 flex size-4 items-center justify-center rounded-full bg-zinc-400 text-zinc-100 transition-colors duration-100 hover:bg-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200"
+          className="-translate-y-1/2 absolute top-1/2 right-1.5 z-10 flex size-4 items-center justify-center rounded-full bg-zinc-400 text-zinc-100 transition-colors duration-100 hover:bg-zinc-500 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-200"
           onClick={() => {
             column.setFilterValue({
               operator: filterValue.operator,
@@ -281,7 +281,7 @@ function FilterValueInput({ column }: { column: Column<Ticker> }) {
       <input
         ref={inputRef}
         className={cn(
-          "relative h-7 gap-x-1.5 rounded-md border border-zinc-200 bg-zinc-100 px-6 text-sm focus:outline-none focus-visible:border-blue-300 focus-visible:ring-2 focus-visible:ring-blue-200 dark:border-blue-500/50 dark:bg-blue-500/10",
+          "relative h-7 gap-x-1.5 rounded-md border border-zinc-200 bg-zinc-100 px-6 text-sm focus:outline-hidden focus-visible:border-blue-300 focus-visible:ring-2 focus-visible:ring-blue-200 dark:border-blue-500/50 dark:bg-blue-500/10",
           !shouldShowOperator && "pl-1.5",
         )}
         placeholder="Type a value..."

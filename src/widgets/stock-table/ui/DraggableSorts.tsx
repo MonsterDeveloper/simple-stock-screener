@@ -130,7 +130,7 @@ function SortPopoverRow({
       ref={setNodeRef}
     >
       <button
-        className="flex h-8 items-center justify-center rounded-md pr-3 pl-2 focus:outline-none focus-visible:bg-zinc-100"
+        className="flex h-8 items-center justify-center rounded-md pr-3 pl-2 focus:outline-hidden focus-visible:bg-zinc-100"
         {...attributes}
         {...listeners}
       >

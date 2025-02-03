@@ -12,7 +12,7 @@ export function TableHeader({
           {headerGroup.headers.map((header, index, headers) => (
             <th
               key={header.id}
-              className="-top-px sticky z-10 bg-bg-primary bg-white/50 px-4 py-1.5 text-left font-normal text-sm text-zinc-500 backdrop-blur-sm dark:bg-zinc-900/50"
+              className="-top-px sticky z-10 bg-bg-primary bg-white/50 px-4 py-1.5 text-left font-normal text-sm text-zinc-500 backdrop-blur-xs dark:bg-zinc-900/50"
               style={
                 index === headers.length - 1
                   ? undefined

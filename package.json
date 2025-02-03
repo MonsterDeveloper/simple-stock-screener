@@ -58,6 +58,7 @@
     "@cloudflare/workers-types": "^4.20250129.0",
     "@cto_of_everything/biome-config": "^1.1.0",
     "@react-router/dev": "^7.1.5",
+    "@tailwindcss/vite": "^4.0.3",
     "@types/node": "^22",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",

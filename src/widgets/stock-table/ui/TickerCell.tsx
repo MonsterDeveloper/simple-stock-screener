@@ -22,7 +22,7 @@ export function TickerCell({ getValue, row }: CellContext<Ticker, string>) {
       </div>
       <LinkBox asChild>
         <div className="group flex flex-row items-center gap-x-1.5 px-4 py-1.5">
-          <div className="size-3.5 overflow-hidden rounded">
+          <div className="size-3.5 overflow-hidden rounded-sm">
             <img
               src={`https://img.logo.dev/ticker/${getValue()}?token=pk_Y8Ewg1JpSNuBNeYS_o2QyA&format=png&size=64&retina=true`}
               alt={`${getValue()} logo`}

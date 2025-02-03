@@ -26,7 +26,7 @@ export function SelectionActions({
             className="flex gap-1 rounded-xl border border-zinc-200 bg-white px-3 py-1.5 shadow-md dark:border-zinc-700 dark:bg-zinc-700/50"
           >
             <div className="flex flex-row items-center gap-x-1 text-sm">
-              <div className="rounded bg-blue-500/10 px-2 py-0.5 text-blue-500">
+              <div className="rounded-sm bg-blue-500/10 px-2 py-0.5 text-blue-500">
                 {selectedCount}
               </div>
               selected
