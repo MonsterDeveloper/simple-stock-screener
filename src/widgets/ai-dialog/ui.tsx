@@ -50,7 +50,7 @@ export function AiDialog({
       <DialogContent>
         {children}
         <ScrollArea className="max-h-[calc(100vh-10rem)]">
-          {isLoading ? (
+          {isLoading && content.length === 0 ? (
             <div className="flex h-5 w-full min-w-0 flex-row items-center justify-start gap-x-2 overflow-hidden whitespace-nowrap text-sm text-zinc-500">
               <IconRotateClockwise2 className="size-4 animate-spin" />
               <AnimatePresence mode="popLayout" initial={false}>
