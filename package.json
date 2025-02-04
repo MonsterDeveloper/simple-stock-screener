@@ -16,7 +16,7 @@
     "inngest:sync": "curl -X PUT https://simple-stock-screener.ctoofeverything.dev/api/inngest",
     "typecheck": "react-router typegen && tsc -b",
     "check": "biome check --write",
-    "deploy": "bun db:migrate && bun wrangler deploy && bun inngest:sync"
+    "deploy": "bun wrangler deploy && bun inngest:sync"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.1.9",
