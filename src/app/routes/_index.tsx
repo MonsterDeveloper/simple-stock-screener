@@ -79,8 +79,8 @@ export default function IndexPage({
           <a
             href="https://logo.dev"
             className="text-zinc-500 transition-colors duration-75 hover:text-zinc-400"
+            // biome-ignore lint/a11y/noBlankTarget: Logo.dev attribution requirement
             target="_blank"
-            rel="noreferrer"
           >
             Logos provided by Logo.dev
           </a>
