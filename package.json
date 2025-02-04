@@ -80,5 +80,6 @@
   "trustedDependencies": [
     "inngest-cli",
     "better-sqlite3"
-  ]
+  ],
+  "packageManager": "bun@1.2.2"
 }
