@@ -1,6 +1,7 @@
 workers_dev = false
 name = "simple-stock-screener"
-compatibility_date = "2024-11-18"
+compatibility_date = "2025-02-04"
+compatibility_flags = ["nodejs_compat_v2"]
 main = "./build/server/index.js"
 assets = { directory = "./build/client/" }
 
