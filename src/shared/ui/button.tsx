@@ -2,7 +2,7 @@ import { type ComponentPropsWithoutRef, forwardRef } from "react"
 import { type VariantProps, tv } from "tailwind-variants"
 
 const button = tv({
-  base: "shrink-0",
+  base: "shrink-0 enabled:hover:cursor-pointer",
   variants: {
     variant: {
       secondary: [
