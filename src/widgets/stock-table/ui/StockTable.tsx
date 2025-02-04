@@ -1,5 +1,8 @@
 import type { Ticker } from "@/entities/ticker"
+import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/ui/cn"
+import { DropdownMenuTrigger } from "@/shared/ui/dropdown-menu"
+import { IconFilter } from "@tabler/icons-react"
 import {
   type ColumnFiltersState,
   type RowSelectionState,
@@ -15,7 +18,10 @@ import { type NumberFilterValue, columns } from "../model"
 import { ActiveFilters } from "./ActiveFilters"
 import { SelectionActions } from "./SelectionActions"
 import { TableActions } from "./TableActions"
+import { TableFilter } from "./TableFilter"
 import { TableHeader } from "./TableHeader"
+import { TableSearch } from "./TableSearch"
+import { TableSort } from "./TableSort"
 
 // TODO implement pagination
 export function StockTable({
@@ -74,6 +80,8 @@ export function StockTable({
   ])
   const [isFiltersOpen, setIsFiltersOpen] = useState(true)
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+  const [searchQuery, setSearchQuery] = useState("")
+  const [isSortPopoverOpen, setIsSortPopoverOpen] = useState(false)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: We need to re-run this effect when the rowSelection changes
   useEffect(() => {
@@ -97,18 +105,41 @@ export function StockTable({
       sorting,
       columnFilters,
       rowSelection,
+      globalFilter: searchQuery,
     },
   })
-  const [isSortPopoverOpen, setIsSortPopoverOpen] = useState(false)
 
   return (
     <>
       <TableActions
-        table={table}
-        isFiltersOpen={isFiltersOpen}
-        setIsFiltersOpen={setIsFiltersOpen}
-        setIsSortPopoverOpen={setIsSortPopoverOpen}
-        setSorting={setSorting}
+        sort={
+          <TableSort
+            table={table}
+            setIsSortPopoverOpen={setIsSortPopoverOpen}
+            setSorting={setSorting}
+          />
+        }
+        filter={
+          <TableFilter
+            table={table}
+            isFiltersOpen={isFiltersOpen}
+            setIsFiltersOpen={setIsFiltersOpen}
+          >
+            <DropdownMenuTrigger asChild>
+              <Button variant="tertiary" className="w-7 px-0">
+                <IconFilter className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+          </TableFilter>
+        }
+        search={
+          <TableSearch
+            value={searchQuery}
+            onChange={(event) => {
+              setSearchQuery(event.target.value)
+            }}
+          />
+        }
       />
       <ActiveFilters
         table={table}

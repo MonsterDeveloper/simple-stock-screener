@@ -11,7 +11,7 @@ export function TickerCell({ getValue, row }: CellContext<Ticker, string>) {
     <td className="group relative">
       <div
         className={cn(
-          "-left-6 absolute inset-y-0 flex items-center justify-center opacity-0 transition-opacity duration-100 group-hover:opacity-100",
+          "-translate-x-full absolute inset-y-0 left-0 flex items-center justify-center pr-2 opacity-0 transition-opacity duration-100 group-hover:opacity-100",
           row.getIsSelected() && "opacity-100",
         )}
       >
