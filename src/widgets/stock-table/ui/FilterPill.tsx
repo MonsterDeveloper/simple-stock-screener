@@ -77,7 +77,7 @@ export function FilterPill({ column }: { column: Column<Ticker> }) {
 
             isActive
               ? "border-blue-300 bg-blue-50/50 text-blue-500 hover:bg-blue-50 dark:border-blue-500/50 dark:bg-blue-500/10 dark:hover:bg-blue-500/20"
-              : "border-zinc-200 bg-white hover:bg-zinc-50",
+              : "border-zinc-200 bg-white hover:bg-zinc-50 dark:border-zinc-700 dark:bg-transparent dark:hover:bg-zinc-800",
           )}
         >
           <div
@@ -100,7 +100,7 @@ export function FilterPill({ column }: { column: Column<Ticker> }) {
             <IconChevronDown
               className={cn(
                 "ml-1 size-3.5 shrink-0",
-                !isActive && "text-zinc-400",
+                !isActive && "text-zinc-400 dark:text-zinc-600",
               )}
               strokeWidth={2.5}
             />
@@ -112,7 +112,7 @@ export function FilterPill({ column }: { column: Column<Ticker> }) {
         <div className="flex flex-row items-center justify-start gap-x-0.5 text-xs text-zinc-400">
           {String(column.columnDef.header)}
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex h-4 flex-row items-center justify-center rounded-md px-0.5 text-zinc-600 transition-colors duration-75 hover:cursor-pointer hover:bg-zinc-100 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-200">
+            <DropdownMenuTrigger className="flex h-4 flex-row items-center justify-center rounded-md px-0.5 text-zinc-600 transition-colors duration-75 hover:cursor-pointer hover:bg-zinc-100 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-200 dark:text-zinc-400 dark:hover:bg-zinc-700">
               <span className="[&_svg]:size-2.5">
                 {filterValue && FILTER_OPERATOR_ICONS[filterValue.operator]}
               </span>
@@ -255,7 +255,7 @@ function FilterValueInput({ column }: { column: Column<Ticker> }) {
         </div>
       )}
 
-      {String(inputValue).length > 0 && (
+      {inputValue && String(inputValue).length > 0 && (
         <button
           type="button"
           className="-translate-y-1/2 absolute top-1/2 right-1.5 z-10 flex size-4 items-center justify-center rounded-full bg-zinc-400 text-zinc-100 transition-colors duration-100 hover:cursor-pointer hover:bg-zinc-500 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-200"
@@ -273,7 +273,7 @@ function FilterValueInput({ column }: { column: Column<Ticker> }) {
       <input
         ref={inputRef}
         className={cn(
-          "relative h-7 gap-x-1.5 rounded-md border border-zinc-200 bg-zinc-100 px-6 text-sm focus:outline-hidden focus-visible:border-blue-300 focus-visible:ring-2 focus-visible:ring-blue-200 dark:border-blue-500/50 dark:bg-blue-500/10",
+          "relative h-7 gap-x-1.5 rounded-md border border-zinc-200 bg-zinc-100 px-6 text-sm focus:outline-hidden focus-visible:border-blue-300 focus-visible:ring-2 focus-visible:ring-blue-200 dark:border-zinc-600 dark:bg-zinc-800 dark:focus-visible:border-blue-500/50 dark:focus-visible:bg-blue-500/10",
           !shouldShowOperator && "pl-1.5",
         )}
         placeholder="Type a value..."
