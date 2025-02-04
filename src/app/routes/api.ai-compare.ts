@@ -1,7 +1,9 @@
-import { analyzeFundamentals } from "@/features/ai-analysis/fundamentals"
-import { analyzeSentiment } from "@/features/ai-analysis/sentiment"
-import { analyzeTechnicals } from "@/features/ai-analysis/technicals"
-import { analyzeValuation } from "@/features/ai-analysis/valuation"
+import {
+  analyzeFundamentals,
+  analyzeSentiment,
+  analyzeTechnicals,
+  analyzeValuation,
+} from "@/features/stock-analysis"
 import { streamText } from "ai"
 import { z } from "zod"
 import type { Route } from "./+types/api.ai-compare"
@@ -32,17 +34,16 @@ const dataSchema = z.object({
 export async function action({ context, request }: Route.ActionArgs) {
   const { prompt: tickers } = dataSchema.parse(await request.json())
 
-  const endDate = new Date().toISOString().split("T")[0]
-  const apiKey = context.cloudflare.env.FINANCIAL_DATASETS_API_KEY
+  const financialDatasets = context.financialDatasets
 
   const analyses = await Promise.all(
     tickers.map(async (ticker) => {
       const [technicals, fundamentals, sentiment, valuation] =
         await Promise.all([
-          analyzeTechnicals({ ticker, endDate, apiKey }),
-          analyzeFundamentals({ ticker, endDate, apiKey }),
-          analyzeSentiment({ ticker, endDate, apiKey }),
-          analyzeValuation({ ticker, endDate, apiKey }),
+          analyzeTechnicals({ ticker, financialDatasets }),
+          analyzeFundamentals({ ticker, financialDatasets }),
+          analyzeSentiment({ ticker, financialDatasets }),
+          analyzeValuation({ ticker, financialDatasets }),
         ])
       return { ticker, technicals, fundamentals, sentiment, valuation }
     }),
@@ -73,7 +74,6 @@ ${JSON.stringify(valuation)}
 
   return result.toDataStreamResponse({
     getErrorMessage: (error) => {
-      console.error(error)
       return String(error)
     },
   })

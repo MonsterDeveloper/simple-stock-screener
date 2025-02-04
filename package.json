@@ -13,9 +13,10 @@
     "db:push": "drizzle-kit push --config ./src/shared/config/drizzle-kit.ts",
     "db:migrate": "wrangler d1 migrations apply simple-stock-screener --remote",
     "inngest:dev": "inngest-cli dev --no-discovery -u http://localhost:5173/api/inngest",
+    "inngest:sync": "curl -X PUT https://simple-stock-screener.ctoofeverything.dev/api/inngest",
     "typecheck": "react-router typegen && tsc -b",
     "check": "biome check --write",
-    "deploy": "bun db:migrate && bun wrangler deploy"
+    "deploy": "bun db:migrate && bun wrangler deploy && bun inngest:sync"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.1.9",
@@ -42,7 +43,7 @@
     "inngest": "^3.31.3",
     "isbot": "^5.1.22",
     "marked": "^15.0.6",
-    "motion": "^12.0.9",
+    "motion": "^12.0.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^9.0.3",
@@ -56,9 +57,10 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@cloudflare/workers-types": "^4.20250129.0",
-    "@cto_of_everything/biome-config": "^1.1.0",
+    "@cto_of_everything/biome-config": "^1.1.3",
     "@react-router/dev": "^7.1.5",
     "@tailwindcss/vite": "^4.0.3",
+    "@total-typescript/ts-reset": "^0.6.1",
     "@types/node": "^22",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",

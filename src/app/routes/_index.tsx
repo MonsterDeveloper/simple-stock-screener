@@ -32,7 +32,6 @@ export default function IndexPage({
   const [isAiCompareDialogOpen, setIsAiCompareDialogOpen] = useState(false)
   const { handleSubmit, completion, setInput, isLoading } = useCompletion({
     api: "/api/ai-compare",
-    // biome-ignore lint/style/useNamingConvention: External library
     experimental_throttle: 50,
   })
 

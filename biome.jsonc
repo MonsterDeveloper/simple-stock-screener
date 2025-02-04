@@ -6,18 +6,9 @@
       ".react-router/**/*",
       "worker-configuration.d.ts",
       "build/**/*",
-      "app/entry.server.tsx"
+      "app/entry.server.tsx",
+      "drizzle-migrations/**/*"
     ]
-  },
-  "linter": {
-    "rules": {
-      "nursery": {
-        "useSortedClasses": {
-          "fix": "safe",
-          "level": "error"
-        }
-      }
-    }
   },
   "javascript": {
     "globals": [
@@ -28,6 +19,15 @@
     ]
   },
   "overrides": [
+    {
+      "include": ["tsconfig.*.json"],
+      "json": {
+        "parser": {
+          "allowComments": true,
+          "allowTrailingCommas": true
+        }
+      }
+    },
     {
       "include": [
         "src/app/routes/**/*",
@@ -41,19 +41,6 @@
         "rules": {
           "style": {
             "noDefaultExport": "off"
-          }
-        }
-      }
-    },
-    {
-      "include": [
-        "src/app/routes/api.inngest/process-ticker.ts",
-        "src/shared/lib/financial-datasets.server.ts"
-      ],
-      "linter": {
-        "rules": {
-          "style": {
-            "useNamingConvention": "off"
           }
         }
       }

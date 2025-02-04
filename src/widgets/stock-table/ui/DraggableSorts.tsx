@@ -35,7 +35,6 @@ import type { Column, Table } from "@tanstack/react-table"
 export function DraggableSorts({ table }: { table: Table<Ticker> }) {
   const sortingState = table.getState().sorting.map((sorting) => ({
     ...sorting,
-    // biome-ignore lint/style/noNonNullAssertion: This column is guaranteed to exist
     column: table.getColumn(sorting.id)!,
   }))
 

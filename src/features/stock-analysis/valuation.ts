@@ -1,64 +1,72 @@
-import {
-  getFinancialMetrics,
-  searchByLineItems,
-} from "@/shared/lib/financial-datasets.server"
+import type { FinancialDatasetsClient } from "@/shared/lib/financial-datasets.server"
+import type { StockAnalysisSignal } from "./model"
 
 // Valuation analysis by virattt
 // https://github.com/virattt/ai-hedge-fund/blob/46375ac958e109068074a56bff263bdbbdc9ec3a/src/agents/valuation.py
 
+/**
+ * Analyzes the valuation of a stock using multiple methods including DCF and Owner Earnings.
+ * Combines both analyses to provide a comprehensive valuation signal.
+ *
+ * @param params - The parameters for valuation analysis
+ * @param params.ticker - The stock ticker symbol
+ * @param params.apiKey - API key for financial data access
+ * @param params.client - Financial datasets client instance
+ * @returns An object containing the valuation signal, confidence score, and detailed reasoning
+ */
 export async function analyzeValuation({
   ticker,
-  endDate,
-  apiKey,
+  financialDatasets,
 }: {
   ticker: string
-  endDate: string
-  apiKey: string
+  financialDatasets: FinancialDatasetsClient
 }): Promise<{
-  signal: "bullish" | "bearish" | "neutral"
+  signal: StockAnalysisSignal
   confidence: number
   reasoning: {
     dcfAnalysis: {
-      signal: "bullish" | "bearish" | "neutral"
+      signal: StockAnalysisSignal
       details: string
     }
     ownerEarningsAnalysis: {
-      signal: "bullish" | "bearish" | "neutral"
+      signal: StockAnalysisSignal
       details: string
     }
   }
 }> {
   const {
     financial_metrics: [metrics],
-  } = await getFinancialMetrics({
+  } = await financialDatasets.getFinancialMetrics({
     ticker,
     period: "ttm",
-    apiKey,
-    reportPeriodLte: endDate,
   })
 
+  if (!metrics) {
+    throw new Error("No financial metrics found")
+  }
+
   // Fetch specific line items needed for valuation
-  const { search_results: financialLineItems } = await searchByLineItems({
-    tickers: [ticker],
-    lineItems: [
-      "free_cash_flow",
-      "net_income",
-      "depreciation_and_amortization",
-      "capital_expenditure",
-      "working_capital",
-    ],
-    period: "ttm",
-    limit: 2,
-    apiKey,
-  })
+  const { search_results: financialLineItems } =
+    await financialDatasets.searchByLineItems({
+      tickers: [ticker],
+      lineItems: [
+        "free_cash_flow",
+        "net_income",
+        "depreciation_and_amortization",
+        "capital_expenditure",
+        "working_capital",
+      ],
+      period: "ttm",
+      limit: 2,
+    })
 
   // Safety checks
   if (financialLineItems.length < 2) {
     throw new Error("Not enough financial data")
   }
 
-  const currentFinancials = financialLineItems[0]
-  const previousFinancials = financialLineItems[1]
+  const currentFinancials = financialLineItems[0]!
+  const previousFinancials = financialLineItems[1]!
 
   // Calculate working capital change
   const workingCapitalChange =
@@ -119,7 +127,21 @@ export async function analyzeValuation({
 }
 
 /**
- * Calculates the intrinsic value using Buffett's Owner Earnings method.
+ * Calculates the intrinsic value of a company using Warren Buffett's Owner Earnings method.
+ * This method considers net income, depreciation, capital expenditures, and working capital changes
+ * to determine a more accurate picture of a company's true earnings power.
+ *
+ *
+ * @param params - Parameters for owner earnings calculation
+ * @param params.netIncome - Net income from the most recent period
+ * @param params.depreciation - Depreciation and amortization expenses
+ * @param params.capex - Capital expenditures
+ * @param params.workingCapitalChange - Change in working capital
+ * @param params.growthRate - Expected growth rate (default: 5%)
+ * @param params.requiredReturn - Required rate of return (default: 15%)
+ * @param params.marginOfSafety - Margin of safety to apply (default: 25%)
+ * @param params.numYears - Number of years to project (default: 5)
+ * @returns The calculated intrinsic value using owner earnings method
  */
 function calculateOwnerEarningsValue({
   netIncome,
@@ -156,7 +178,7 @@ function calculateOwnerEarningsValue({
   // Calculate terminal value
   const terminalGrowth = Math.min(growthRate, 0.03)
   const terminalValue =
-    (futureValues[futureValues.length - 1] * (1 + terminalGrowth)) /
+    (futureValues[futureValues.length - 1]! * (1 + terminalGrowth)) /
     (requiredReturn - terminalGrowth)
   const terminalValueDiscounted =
     terminalValue / (1 + requiredReturn) ** numYears
@@ -168,8 +190,18 @@ function calculateOwnerEarningsValue({
 }
 
 /**
- * Computes the discounted cash flow (DCF) for a given company based on the current free cash flow.
- * Use this function to calculate the intrinsic value of a stock.
+ * Calculates the intrinsic value of a company using the Discounted Cash Flow (DCF) method.
+ * This method projects future free cash flows and discounts them back to present value.
+ *
+ * @see https://www.investopedia.com/terms/d/dcf.asp
+ *
+ * @param params - Parameters for DCF calculation
+ * @param params.freeCashFlow - Current free cash flow
+ * @param params.growthRate - Expected growth rate
+ * @param params.discountRate - Rate used to discount future cash flows
+ * @param params.terminalGrowthRate - Long-term growth rate for terminal value
+ * @param params.numYears - Number of years to project
+ * @returns The calculated intrinsic value using DCF method
  */
 function calculateIntrinsicValue({
   freeCashFlow,
@@ -197,7 +229,7 @@ function calculateIntrinsicValue({
 
   // Calculate the terminal value
   const terminalValue =
-    (cashFlows[cashFlows.length - 1] * (1 + terminalGrowthRate)) /
+    (cashFlows[cashFlows.length - 1]! * (1 + terminalGrowthRate)) /
     (discountRate - terminalGrowthRate)
   const terminalPresentValue = terminalValue / (1 + discountRate) ** numYears
 

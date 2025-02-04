@@ -1,0 +1,30 @@
+---
+description: 
+globs: *.ts, *.tsx
+---
+
+Write clean and concise TypeScript code. It should be maintainable, testable, and follow the best modern coding practices.
+
+Follow these rules:
+- Prefer descriptive names: `previous` instead of `prev`, `database` instead of `db`, and so on.
+- Follow the TSConfig from the [tsconfig.cloudflare.json](mdc:tsconfig.cloudflare.json)
+- Rely on implicit types and TS type inference.
+- Don't specify the return type explicitly unless absolutely neccessary.
+- Use ES Modules
+- Favor avoiding dependencies when reasonable (e.g. use native fetch instead of axios/node-fetch).
+- Try to use Web Standard APIs (fetch, Request, Response, etc) wherever possible and follow the #UseThePlatform methodology.
+- Use `interface` over `type` where possible
+- Prefer unions and `as const` objects instead of enums
+- When writing JSDoc use `@see` (with URLs) and `{@linkcode }` where applicable to include related links and code symbols. Example of a well-written and formatted JSDoc:
+```ts
+/**
+ * Print a message to the terminal with the given options.
+ *
+ * Note that on some versions of Windows, {@linkcode StyleOptions.color} may not
+ * be supported in combination with {@linkcode StyleOptions.bold}.
+ * 
+ * @see https://deno.com/docs/print
+ */
+declare function print(message: string, options: StyleOptions): void;
+```
+- For converting to string prefer `String()` over `toString()`

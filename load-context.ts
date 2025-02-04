@@ -1,6 +1,7 @@
 import { type DrizzleD1Database, drizzle } from "drizzle-orm/d1"
 
 import * as schema from "./src/shared/lib/database"
+import { FinancialDatasetsClient } from "./src/shared/lib/financial-datasets.server"
 
 import { type OpenAIProvider, createOpenAI } from "@ai-sdk/openai"
 
@@ -19,6 +20,7 @@ declare module "react-router" {
     }
     database: DrizzleD1Database<typeof schema>
     openai: OpenAIProvider
+    financialDatasets: FinancialDatasetsClient
   }
 }
 
@@ -33,16 +35,19 @@ export function getLoadContext({
   const database = drizzle(context.cloudflare.env.DB, { schema })
   const openai = createOpenAI({
     apiKey: context.cloudflare.env.OPENAI_API_KEY,
-    // biome-ignore lint/style/useNamingConvention: External library
     baseURL: `https://gateway.ai.cloudflare.com/v1/${context.cloudflare.env.ACCOUNT_ID}/${context.cloudflare.env.AI_GATEWAY_ID}/openai`,
     headers: {
       "cf-aig-authorization": `Bearer ${context.cloudflare.env.AI_GATEWAY_TOKEN}`,
     },
   })
+  const financialDatasets = new FinancialDatasetsClient(
+    context.cloudflare.env.FINANCIAL_DATASETS_API_KEY,
+  )
 
   return {
     cloudflare: context.cloudflare,
     database,
     openai,
+    financialDatasets,
   }
 }

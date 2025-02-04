@@ -1,6 +1,5 @@
-import type * as schema from "@/shared/lib/database"
-import type { DrizzleD1Database } from "drizzle-orm/d1"
 import { EventSchemas, Inngest, InngestMiddleware } from "inngest"
+import type { AppLoadContext } from "react-router"
 
 const bindings = new InngestMiddleware({
   name: "Cloudflare Workers bindings",
@@ -13,16 +12,14 @@ const bindings = new InngestMiddleware({
             // ex. fetch(request, env, ctx)
             // We cast the argument to the global Env var that Wrangler generates:
             const reqArg = reqArgs[0] as {
-              context: {
-                cloudflare: { env: CloudflareEnvironment }
-                database: DrizzleD1Database<typeof schema>
-              }
+              context: AppLoadContext
             }
             return {
               ctx: {
                 // Return the env object to the function handler's input args
                 env: reqArg.context.cloudflare.env,
                 database: reqArg.context.database,
+                financialDatasets: reqArg.context.financialDatasets,
               },
             }
           },

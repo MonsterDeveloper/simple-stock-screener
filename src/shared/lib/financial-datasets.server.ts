@@ -1,5 +1,21 @@
+/**
+ * Custom error class for Financial Datasets API errors
+ */
+export class FinancialDatasetsError extends Error {
+  constructor(
+    message: string,
+    public status?: number,
+    public body?: unknown,
+  ) {
+    super(message)
+    this.name = "FinancialDatasetsError"
+  }
+}
+
+/** The time period for financial data queries */
 type FinancialDatasetsPeriod = "annual" | "quarterly" | "ttm"
 
+/** Financial statement line items that can be queried */
 type FinancialDatasetsLineItem =
   | "free_cash_flow"
   | "working_capital"
@@ -71,49 +87,11 @@ type FinancialDatasetsLineItem =
   | "net_cash_flow_from_operations"
   | "share_based_compensation"
 
-export async function searchByLineItems<T extends FinancialDatasetsLineItem[]>({
-  lineItems,
-  tickers,
-  limit,
-  period,
-  apiKey,
-}: {
-  apiKey: string
-  lineItems: T
-  tickers: string[]
-  limit?: number
-  period?: FinancialDatasetsPeriod
-}): Promise<{
-  search_results: ({
-    ticker: string
-    report_period: string
-    period: FinancialDatasetsPeriod
-    currency: string
-  } & {
-    [key in T[number]]: number
-  })[]
-}> {
-  const response = await fetch(
-    "https://api.financialdatasets.ai/financials/search/line-items",
-    {
-      method: "POST",
-      headers: {
-        "X-API-KEY": apiKey,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        line_items: lineItems,
-        tickers,
-        limit,
-        period,
-      }),
-    },
-  )
-
-  return response.json()
-}
-
-interface FinancialDatasetsMetrics {
+/**
+ * Financial metrics and ratios for a company
+ * Includes valuation, profitability, efficiency, liquidity, leverage, and growth metrics
+ */
+export interface FinancialDatasetsMetrics {
   ticker: string
   market_cap: number
   enterprise_value: number
@@ -156,39 +134,9 @@ interface FinancialDatasetsMetrics {
   free_cash_flow_per_share: number
 }
 
-export async function getFinancialMetrics({
-  apiKey,
-  ticker,
-  period,
-  limit,
-  reportPeriodLte,
-  reportPeriodGte,
-}: {
-  apiKey: string
-  ticker: string
-  period: FinancialDatasetsPeriod
-  limit?: number
-  reportPeriodLte?: string
-  reportPeriodGte?: string
-}): Promise<{ financial_metrics: FinancialDatasetsMetrics[] }> {
-  const response = await fetch(
-    `https://api.financialdatasets.ai/financial-metrics?${new URLSearchParams({
-      ticker,
-      period,
-      ...(limit && { limit: limit.toString() }),
-      ...(reportPeriodLte && { report_period_lte: reportPeriodLte }),
-      ...(reportPeriodGte && { report_period_gte: reportPeriodGte }),
-    })}`,
-    {
-      headers: {
-        "X-API-KEY": apiKey,
-      },
-    },
-  )
-
-  return response.json()
-}
-
+/**
+ * Insider trading transaction details
+ */
 interface FinancialDatasetsInsiderTrade {
   ticker: string
   issuer: string
@@ -205,36 +153,9 @@ interface FinancialDatasetsInsiderTrade {
   filing_date: Date
 }
 
-export async function getInsiderTrades({
-  apiKey,
-  ticker,
-  limit,
-  filingDateLte,
-  filingDateGte,
-}: {
-  apiKey: string
-  ticker: string
-  limit?: number
-  filingDateLte?: string
-  filingDateGte?: string
-}): Promise<{ insider_trades: FinancialDatasetsInsiderTrade[] }> {
-  const response = await fetch(
-    `https://api.financialdatasets.ai/insider-trades?${new URLSearchParams({
-      ticker,
-      ...(limit && { limit: limit.toString() }),
-      ...(filingDateLte && { filing_date_lte: filingDateLte }),
-      ...(filingDateGte && { filing_date_gte: filingDateGte }),
-    })}`,
-    {
-      headers: {
-        "X-API-KEY": apiKey,
-      },
-    },
-  )
-
-  return response.json()
-}
-
+/**
+ * Company news article details
+ */
 interface FinancialDatasetsNews {
   ticker: string
   title: string
@@ -245,37 +166,10 @@ interface FinancialDatasetsNews {
   sentiment: "positive" | "negative" | "neutral"
 }
 
-export async function getCompanyNews({
-  apiKey,
-  ticker,
-  startDate,
-  endDate,
-  limit,
-}: {
-  apiKey: string
-  ticker: string
-  startDate?: string
-  endDate?: string
-  limit?: number
-}): Promise<{ news: FinancialDatasetsNews[] }> {
-  const response = await fetch(
-    `https://api.financialdatasets.ai/news?${new URLSearchParams({
-      ticker,
-      ...(startDate && { start_date: startDate }),
-      ...(endDate && { end_date: endDate }),
-      ...(limit && { limit: limit.toString() }),
-    })}`,
-    {
-      headers: {
-        "X-API-KEY": apiKey,
-      },
-    },
-  )
-
-  return response.json()
-}
-
-interface FinancialDatasetsPrice {
+/**
+ * Stock price data point
+ */
+export interface FinancialDatasetsPrice {
   open: number
   close: number
   high: number
@@ -284,31 +178,223 @@ interface FinancialDatasetsPrice {
   time: string
 }
 
-export async function getPrices({
-  apiKey,
-  ticker,
-  startDate,
-  endDate,
-}: {
-  apiKey: string
-  ticker: string
-  startDate: string
-  endDate?: string
-}): Promise<{ prices: FinancialDatasetsPrice[] }> {
-  const response = await fetch(
-    `https://api.financialdatasets.ai/prices?${new URLSearchParams({
-      ticker,
-      interval: "day",
-      interval_multiplier: "1",
-      ...(startDate && { start_date: startDate }),
-      ...(endDate && { end_date: endDate }),
-    })}`,
-    {
-      headers: {
-        "X-API-KEY": apiKey,
-      },
-    },
-  )
+/**
+ * Client for accessing the Financial Datasets API
+ * Provides methods to fetch financial data, metrics, insider trades, news, and prices
+ * @see https://docs.financialdatasets.ai/introduction
+ */
+export class FinancialDatasetsClient {
+  private baseUrl = "https://api.financialdatasets.ai"
 
-  return response.json()
+  constructor(private apiKey: string) {}
+
+  /** Make an API request with error handling */
+  private async makeRequest<T>(
+    endpoint: string,
+    options: RequestInit = {},
+  ): Promise<T> {
+    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      ...options,
+      headers: {
+        "X-API-KEY": this.apiKey,
+        "Content-Type": "application/json",
+        ...options.headers,
+      },
+    })
+
+    if (!response.ok) {
+      throw new FinancialDatasetsError(
+        `API request failed: ${response.statusText}`,
+        response.status,
+        await response.json().catch(() => undefined),
+      )
+    }
+
+    return response.json() as Promise<T>
+  }
+
+  /** Format a date to YYYY-MM-DD string */
+  private formatDate(date: Date) {
+    return date.toISOString().split("T")[0]!
+  }
+
+  /**
+   * Search for companies by financial line items
+   * @param lineItems - List of financial statement line items to retrieve
+   * @param tickers - List of stock tickers to search
+   * @param limit - Maximum number of results to return
+   * @param period - Time period for the data
+   * @see https://docs.financialdatasets.ai/api-reference/endpoint/financials/search-by-line-items
+   */
+  searchByLineItems<T extends FinancialDatasetsLineItem[]>({
+    lineItems,
+    tickers,
+    limit,
+    period,
+  }: {
+    lineItems: T
+    tickers: string[]
+    limit?: number
+    period?: FinancialDatasetsPeriod
+  }): Promise<{
+    search_results: ({
+      ticker: string
+      report_period: string
+      period: FinancialDatasetsPeriod
+      currency: string
+    } & {
+      [key in T[number]]: number
+    })[]
+  }> {
+    return this.makeRequest("/financials/search/line-items", {
+      method: "POST",
+      body: JSON.stringify({
+        line_items: lineItems,
+        tickers,
+        limit,
+        period,
+      }),
+    })
+  }
+
+  /**
+   * Get financial metrics and ratios for a company
+   * @param ticker - Stock ticker symbol
+   * @param period - Time period for the data
+   * @param limit - Maximum number of results to return
+   * @param reportPeriodLte - Filter for report period less than or equal to date
+   * @param reportPeriodGte - Filter for report period greater than or equal to date
+   * @see https://docs.financialdatasets.ai/api-reference/endpoint/financial-metrics/historical
+   */
+  getFinancialMetrics({
+    ticker,
+    period,
+    limit,
+    reportPeriodLte,
+    reportPeriodGte,
+  }: {
+    ticker: string
+    period: FinancialDatasetsPeriod
+    limit?: number
+    reportPeriodLte?: Date
+    reportPeriodGte?: Date
+  }): Promise<{ financial_metrics: FinancialDatasetsMetrics[] }> {
+    const params = new URLSearchParams()
+
+    params.set("ticker", ticker)
+    params.set("period", period)
+
+    if (limit) {
+      params.set("limit", String(limit))
+    }
+    if (reportPeriodLte) {
+      params.set("report_period_lte", this.formatDate(reportPeriodLte))
+    }
+    if (reportPeriodGte) {
+      params.set("report_period_gte", this.formatDate(reportPeriodGte))
+    }
+
+    return this.makeRequest(`/financial-metrics?${params}`)
+  }
+
+  /**
+   * Get insider trading data for a company
+   * @param ticker - Stock ticker symbol
+   * @param limit - Maximum number of results to return
+   * @param filingDateLte - Filter for filing date less than or equal to date
+   * @param filingDateGte - Filter for filing date greater than or equal to date
+   * @see https://docs.financialdatasets.ai/api-reference/endpoint/insider-trades
+   */
+  getInsiderTrades({
+    ticker,
+    limit,
+    filingDateLte,
+    filingDateGte,
+  }: {
+    ticker: string
+    limit?: number
+    filingDateLte?: Date
+    filingDateGte?: Date
+  }): Promise<{ insider_trades: FinancialDatasetsInsiderTrade[] }> {
+    const params = new URLSearchParams()
+
+    params.set("ticker", ticker)
+
+    if (limit) {
+      params.set("limit", String(limit))
+    }
+    if (filingDateLte) {
+      params.set("filing_date_lte", this.formatDate(filingDateLte))
+    }
+    if (filingDateGte) {
+      params.set("filing_date_gte", this.formatDate(filingDateGte))
+    }
+
+    return this.makeRequest(`/insider-trades?${params}`)
+  }
+
+  /**
+   * Get news articles for a company
+   *
+   * @param ticker - Stock ticker symbol
+   * @param startDate - Filter for articles after this date
+   * @param endDate - Filter for articles before this date
+   * @param limit - Maximum number of results to return
+   * @see https://docs.financialdatasets.ai/api-reference/endpoint/news
+   */
+  getCompanyNews({
+    ticker,
+    startDate,
+    endDate,
+    limit,
+  }: {
+    ticker: string
+    startDate?: Date
+    endDate?: Date
+    limit?: number
+  }): Promise<{ news: FinancialDatasetsNews[] }> {
+    const params = new URLSearchParams()
+
+    params.set("ticker", ticker)
+
+    if (startDate) {
+      params.set("start_date", this.formatDate(startDate))
+    }
+    if (endDate) {
+      params.set("end_date", this.formatDate(endDate))
+    }
+    if (limit) {
+      params.set("limit", String(limit))
+    }
+
+    return this.makeRequest(`/news?${params}`)
+  }
+
+  /**
+   * Get historical price data for a company
+   *
+   * @param ticker - Stock ticker symbol
+   * @param startDate - Start date for price data
+   * @param endDate - End date for price data
+   * @see https://docs.financialdatasets.ai/api-reference/endpoint/prices
+   */
+  getPrices({
+    ticker,
+    startDate,
+    endDate,
+  }: {
+    ticker: string
+    startDate: Date
+    endDate: Date
+  }): Promise<{ prices: FinancialDatasetsPrice[] }> {
+    const params = new URLSearchParams()
+
+    params.set("ticker", ticker)
+    params.set("interval", "day")
+    params.set("interval_multiplier", "1")
+    params.set("start_date", this.formatDate(startDate))
+    params.set("end_date", this.formatDate(endDate))
+
+    return this.makeRequest(`/prices?${params}`)
+  }
 }

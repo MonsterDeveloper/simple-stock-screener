@@ -6,7 +6,8 @@
     "load-context.ts",
     "worker-configuration.d.ts",
     "src/shared/config/drizzle-kit.ts",
-    "src/shared/lib/database.ts"
+    "src/shared/lib/database.ts",
+    "src/shared/lib/financial-datasets.server.ts"
   ],
   "compilerOptions": {
     "composite": true,

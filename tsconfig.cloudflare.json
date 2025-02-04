@@ -5,7 +5,8 @@
     "src/**/*",
     "workers/**/*",
     "worker-configuration.d.ts",
-    "load-context.ts"
+    "load-context.ts",
+    "reset.d.ts"
   ],
   "exclude": ["src/shared/config/drizzle-kit.ts"],
   "compilerOptions": {

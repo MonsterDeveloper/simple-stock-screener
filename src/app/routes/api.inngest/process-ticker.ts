@@ -1,8 +1,6 @@
 import { tickerMetricDataTable, tickersTable } from "@/shared/lib/database"
 import { inngest } from "@/shared/lib/inngest"
 
-import { searchByLineItems } from "@/shared/lib/financial-datasets.server"
-
 export const processTicker = inngest.createFunction(
   {
     id: "process-ticker",
@@ -10,9 +8,8 @@ export const processTicker = inngest.createFunction(
   {
     event: "ticker.process",
   },
-  async ({ env, database, event }) => {
-    const data = await searchByLineItems({
-      apiKey: env.FINANCIAL_DATASETS_API_KEY,
+  async ({ database, event, financialDatasets }) => {
+    const data = await financialDatasets.searchByLineItems({
       lineItems: [
         "revenue",
         "net_income",
@@ -52,7 +49,6 @@ export const processTicker = inngest.createFunction(
       }
 
       const metrics = calculateMetrics(current, previous)
-      console.log(metrics)
 
       await database.insert(tickersTable).values({
         symbol: ticker,
