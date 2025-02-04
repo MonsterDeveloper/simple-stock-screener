@@ -20,11 +20,13 @@ export const meta: Route.MetaFunction = () => [
 
 export function loader({ context }: Route.LoaderArgs) {
   return {
-    tickers: context.database.query.tickersTable.findMany({
-      with: {
-        metrics: true,
-      },
-    }),
+    tickers: context.database.query.tickersTable
+      .findMany({
+        with: {
+          metrics: true,
+        },
+      })
+      .execute(),
   }
 }
 
