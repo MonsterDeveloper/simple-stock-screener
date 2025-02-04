@@ -11,6 +11,17 @@ import type { ReactNode } from "react"
 import type { Route } from "./+types/root"
 import "./app.css"
 
+export const meta: Route.MetaFunction = () => [
+  {
+    property: "og:image",
+    content: "https://simple-stock-screener.ctoofeverything.dev/og.jpg",
+  },
+  {
+    property: "twitter:image",
+    content: "https://simple-stock-screener.ctoofeverything.dev/og.jpg",
+  },
+]
+
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -35,16 +46,6 @@ export const links: Route.LinksFunction = () => [
   {
     rel: "apple-touch-icon",
     href: "/apple-touch-icon.png",
-  },
-  {
-    rel: "image",
-    href: "https://simple-stock-screener.ctoofeverything.dev/og.jpg",
-    property: "og:image",
-  },
-  {
-    rel: "image",
-    href: "https://simple-stock-screener.ctoofeverything.dev/og.jpg",
-    property: "twitter:image",
   },
 ]
 
