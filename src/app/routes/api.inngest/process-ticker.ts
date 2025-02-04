@@ -1,14 +1,19 @@
 import { tickerMetricDataTable, tickersTable } from "@/shared/lib/database"
 import { inngest } from "@/shared/lib/inngest"
+import { sql } from "drizzle-orm"
 
 export const processTicker = inngest.createFunction(
   {
     id: "process-ticker",
+    batchEvents: {
+      maxSize: 25,
+      timeout: "30s",
+    },
   },
   {
     event: "ticker.process",
   },
-  async ({ database, event, financialDatasets }) => {
+  async ({ database, events, financialDatasets }) => {
     const data = await financialDatasets.searchByLineItems({
       lineItems: [
         "revenue",
@@ -21,7 +26,7 @@ export const processTicker = inngest.createFunction(
         "cash_and_equivalents",
         "shareholders_equity",
       ],
-      tickers: [event.data.ticker],
+      tickers: events.map((event) => event.data.ticker),
       limit: 2,
       period: "annual",
     })
@@ -50,27 +55,74 @@ export const processTicker = inngest.createFunction(
 
       const metrics = calculateMetrics(current, previous)
 
-      await database.insert(tickersTable).values({
-        symbol: ticker,
-        name: "test",
-        exchange: "test",
-        ...metrics,
-      })
-
-      await database.insert(tickerMetricDataTable).values(
-        sortedData.map((item) => ({
+      await database
+        .insert(tickersTable)
+        .values({
           symbol: ticker,
-          ...item,
-          reportPeriod: item.report_period,
-          capitalExpenditure: item.capital_expenditure,
-          incomeTaxExpense: item.income_tax_expense,
-          netCashFlowFromOperations: item.net_cash_flow_from_operations,
-          netIncome: item.net_income,
-          totalDebt: item.total_debt,
-          cashAndEquivalents: item.cash_and_equivalents,
-          shareholdersEquity: item.shareholders_equity,
-        })),
-      )
+          ...metrics,
+        })
+        .onConflictDoUpdate({
+          target: tickersTable.symbol,
+          set: {
+            ...metrics,
+            updatedAt: new Date(),
+          },
+        })
+
+      await database
+        .insert(tickerMetricDataTable)
+        .values(
+          sortedData.map((item) => ({
+            symbol: ticker,
+            reportPeriod: item.report_period,
+            period: item.period,
+            currency: item.currency,
+            revenue: item.revenue,
+            ebit: item.ebit,
+            capitalExpenditure: item.capital_expenditure,
+            incomeTaxExpense: item.income_tax_expense,
+            netCashFlowFromOperations: item.net_cash_flow_from_operations,
+            netIncome: item.net_income,
+            totalDebt: item.total_debt,
+            cashAndEquivalents: item.cash_and_equivalents,
+            shareholdersEquity: item.shareholders_equity,
+          })),
+        )
+        .onConflictDoUpdate({
+          target: [
+            tickerMetricDataTable.symbol,
+            tickerMetricDataTable.reportPeriod,
+          ],
+          set: {
+            currency: sql.raw(
+              `excluded.${tickerMetricDataTable.currency.name}`,
+            ),
+            revenue: sql.raw(`excluded.${tickerMetricDataTable.revenue.name}`),
+            ebit: sql.raw(`excluded.${tickerMetricDataTable.ebit.name}`),
+            capitalExpenditure: sql.raw(
+              `excluded.${tickerMetricDataTable.capitalExpenditure.name}`,
+            ),
+            incomeTaxExpense: sql.raw(
+              `excluded.${tickerMetricDataTable.incomeTaxExpense.name}`,
+            ),
+            netCashFlowFromOperations: sql.raw(
+              `excluded.${tickerMetricDataTable.netCashFlowFromOperations.name}`,
+            ),
+            netIncome: sql.raw(
+              `excluded.${tickerMetricDataTable.netIncome.name}`,
+            ),
+            totalDebt: sql.raw(
+              `excluded.${tickerMetricDataTable.totalDebt.name}`,
+            ),
+            cashAndEquivalents: sql.raw(
+              `excluded.${tickerMetricDataTable.cashAndEquivalents.name}`,
+            ),
+            shareholdersEquity: sql.raw(
+              `excluded.${tickerMetricDataTable.shareholdersEquity.name}`,
+            ),
+            updatedAt: new Date(),
+          },
+        })
     }
   },
 )
