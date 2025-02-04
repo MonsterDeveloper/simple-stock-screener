@@ -16,7 +16,9 @@ export const scheduledProcessing = inngest.createFunction(
         financialDatasets.getAvailableTickers(),
       ])
 
-    const allTickers = new Set([...nasdaqTickers, ...nyseTickers])
+    const allTickers = new Set(
+      [...nasdaqTickers, ...nyseTickers].map((ticker) => ticker.symbol),
+    )
     const supportedTickers = new Set(financialDatasetsTickers)
 
     const tickersToProcess = supportedTickers.intersection(allTickers)
