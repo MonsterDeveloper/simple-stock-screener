@@ -179,6 +179,14 @@ export interface FinancialDatasetsPrice {
 }
 
 /**
+ * Response type for available tickers endpoint
+ */
+interface FinancialDatasetsAvailableTickers {
+  resource: string
+  tickers: string[]
+}
+
+/**
  * Client for accessing the Financial Datasets API
  * Provides methods to fetch financial data, metrics, insider trades, news, and prices
  * @see https://docs.financialdatasets.ai/introduction
@@ -216,6 +224,15 @@ export class FinancialDatasetsClient {
   /** Format a date to YYYY-MM-DD string */
   private formatDate(date: Date) {
     return date.toISOString().split("T")[0]!
+  }
+
+  /**
+   * Get list of available tickers that have financial data
+   
+   * @see https://docs.financialdatasets.ai/api-reference/endpoint/financials/all-financial-statements
+   */
+  getAvailableTickers(): Promise<FinancialDatasetsAvailableTickers> {
+    return this.makeRequest("/financials/tickers")
   }
 
   /**
