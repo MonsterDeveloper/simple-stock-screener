@@ -16,10 +16,10 @@ export const scheduledProcessing = inngest.createFunction(
         financialDatasets.getAvailableTickers(),
       ])
 
-    const commonTickers = new Set([...nasdaqTickers, ...nyseTickers])
+    const allTickers = new Set([...nasdaqTickers, ...nyseTickers])
     const supportedTickers = new Set(financialDatasetsTickers)
 
-    const tickersToProcess = supportedTickers.intersection(commonTickers)
+    const tickersToProcess = supportedTickers.intersection(allTickers)
 
     // Select 50 random tickers
     const selectedTickers = Array.from(tickersToProcess)
