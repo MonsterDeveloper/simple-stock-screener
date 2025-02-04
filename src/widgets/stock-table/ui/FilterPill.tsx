@@ -57,14 +57,6 @@ export function FilterPill({ column }: { column: Column<Ticker> }) {
 
   const [ref, { width }] = useMeasure()
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsOpen(true)
-    }, 200)
-
-    return () => clearTimeout(timeout)
-  }, [])
-
   if (!filterValue) {
     return null
   }
