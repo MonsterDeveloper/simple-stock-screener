@@ -1,3 +1,5 @@
+import { type Cache, cachified } from "@epic-web/cachified"
+
 /**
  * Custom error class for Financial Datasets API errors
  */
@@ -186,6 +188,36 @@ interface FinancialDatasetsAvailableTickers {
   tickers: string[]
 }
 
+/** Normalize cache key by sorting array values and object keys */
+function normalizeCacheKey(key: unknown): unknown {
+  if (Array.isArray(key)) {
+    return key.map(normalizeCacheKey).toSorted()
+  }
+  if (typeof key === "object" && key !== null) {
+    return Object.fromEntries(
+      Object.entries(key)
+        .sort(([first], [second]) => first.localeCompare(second))
+        .map(([key, value]) => [key, normalizeCacheKey(value)]),
+    )
+  }
+  return key
+}
+
+/** Hash a string using SHA-256 for cache key */
+async function hashCacheKey(key: unknown) {
+  const encoder = new TextEncoder()
+  const normalized = normalizeCacheKey(key)
+  const data = encoder.encode(JSON.stringify(normalized))
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("")
+  return hashHex
+}
+
+async function composeCacheKey(method: string, params: unknown) {
+  return `financial-datasets:${method}:${await hashCacheKey(params)}`
+}
+
 /**
  * Client for accessing the Financial Datasets API
  * Provides methods to fetch financial data, metrics, insider trades, news, and prices
@@ -193,8 +225,13 @@ interface FinancialDatasetsAvailableTickers {
  */
 export class FinancialDatasetsClient {
   private baseUrl = "https://api.financialdatasets.ai"
+  private apiKey: string
+  private cache: Cache
 
-  constructor(private apiKey: string) {}
+  constructor(apiKey: string, cache: Cache) {
+    this.apiKey = apiKey
+    this.cache = cache
+  }
 
   /** Make an API request with error handling */
   private async makeRequest<T>(
@@ -228,7 +265,7 @@ export class FinancialDatasetsClient {
 
   /**
    * Get list of available tickers that have financial data
-   
+
    * @see https://docs.financialdatasets.ai/api-reference/endpoint/financials/all-financial-statements
    */
   getAvailableTickers(): Promise<FinancialDatasetsAvailableTickers> {
@@ -243,7 +280,7 @@ export class FinancialDatasetsClient {
    * @param period - Time period for the data
    * @see https://docs.financialdatasets.ai/api-reference/endpoint/financials/search-by-line-items
    */
-  searchByLineItems<T extends FinancialDatasetsLineItem[]>({
+  async searchByLineItems<T extends FinancialDatasetsLineItem[]>({
     lineItems,
     tickers,
     limit,
@@ -253,24 +290,34 @@ export class FinancialDatasetsClient {
     tickers: string[]
     limit?: number
     period?: FinancialDatasetsPeriod
-  }): Promise<{
-    search_results: ({
-      ticker: string
-      report_period: string
-      period: FinancialDatasetsPeriod
-      currency: string
-    } & {
-      [key in T[number]]: number
-    })[]
-  }> {
-    return this.makeRequest("/financials/search/line-items", {
-      method: "POST",
-      body: JSON.stringify({
-        line_items: lineItems,
+  }) {
+    return cachified({
+      key: await composeCacheKey("searchByLineItems", {
+        lineItems,
         tickers,
         limit,
         period,
       }),
+      cache: this.cache,
+      getFreshValue: () =>
+        this.makeRequest<{
+          search_results: ({
+            ticker: string
+            report_period: string
+            period: FinancialDatasetsPeriod
+            currency: string
+          } & {
+            [key in T[number]]: number
+          })[]
+        }>("/financials/search/line-items", {
+          method: "POST",
+          body: JSON.stringify({
+            line_items: lineItems,
+            tickers,
+            limit,
+            period,
+          }),
+        }),
     })
   }
 

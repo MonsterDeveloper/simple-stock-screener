@@ -16,3 +16,7 @@ binding = "DB"
 database_name = "simple-stock-screener"
 database_id = "2e183a38-13a0-46ab-954a-d5593291943d"
 migrations_dir = "drizzle-migrations"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "068acc35637b41ba9063ac380c0a8f2b"

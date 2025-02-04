@@ -1,3 +1,4 @@
+import { cloudflareKvCacheAdapter } from "cachified-adapter-cloudflare-kv"
 import { type DrizzleD1Database, drizzle } from "drizzle-orm/d1"
 
 import * as schema from "./src/shared/lib/database"
@@ -5,7 +6,7 @@ import { FinancialDatasetsClient } from "./src/shared/lib/financial-datasets.ser
 
 import { type OpenAIProvider, createOpenAI } from "@ai-sdk/openai"
 
-import type { ExecutionContext } from "@cloudflare/workers-types"
+import type { ExecutionContext, KVNamespace } from "@cloudflare/workers-types"
 import type { AppLoadContext } from "react-router"
 
 declare global {
@@ -44,8 +45,15 @@ export function getLoadContext({
       "cf-aig-authorization": `Bearer ${context.cloudflare.env.AI_GATEWAY_TOKEN}`,
     },
   })
+
+  const cache = cloudflareKvCacheAdapter({
+    kv: context.cloudflare.env.CACHE as KVNamespace,
+    name: "kv-cache",
+  })
+
   const financialDatasets = new FinancialDatasetsClient(
     context.cloudflare.env.FINANCIAL_DATASETS_API_KEY,
+    cache,
   )
 
   return {
@@ -54,6 +62,7 @@ export function getLoadContext({
       INNGEST_EVENT_KEY: context.cloudflare.env.INNGEST_EVENT_KEY,
       INNGEST_SIGNING_KEY: context.cloudflare.env.INNGEST_SIGNING_KEY,
     },
+    cache,
     database,
     openai,
     financialDatasets,
