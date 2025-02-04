@@ -30,10 +30,12 @@ export default function IndexPage({
   loaderData: { tickers },
 }: Route.ComponentProps) {
   const [isAiCompareDialogOpen, setIsAiCompareDialogOpen] = useState(false)
-  const { handleSubmit, completion, setInput, isLoading } = useCompletion({
-    api: "/api/ai-compare",
-    experimental_throttle: 50,
-  })
+  const { handleSubmit, completion, setInput, isLoading, stop } = useCompletion(
+    {
+      api: "/api/ai-compare",
+      experimental_throttle: 50,
+    },
+  )
 
   return (
     <>
@@ -98,7 +100,13 @@ export default function IndexPage({
       <AiDialog
         content={completion}
         isOpen={isAiCompareDialogOpen}
-        setIsOpen={setIsAiCompareDialogOpen}
+        setIsOpen={(isOpen) => {
+          setIsAiCompareDialogOpen(isOpen)
+
+          if (!isOpen) {
+            stop()
+          }
+        }}
         isLoading={isLoading}
       >
         <DialogTitle className="sr-only">AI Stock Comparison</DialogTitle>

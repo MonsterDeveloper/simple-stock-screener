@@ -292,6 +292,7 @@ export class FinancialDatasetsClient {
     period?: FinancialDatasetsPeriod
   }) {
     return cachified({
+      // TODO caching ticker by ticker
       key: await composeCacheKey("searchByLineItems", {
         lineItems,
         tickers,

@@ -5,6 +5,8 @@ import { LinkBox, LinkOverlay } from "@/shared/ui/link-overlay"
 import type { CellContext } from "@tanstack/react-table"
 
 export function TickerCell({ getValue, row }: CellContext<Ticker, string>) {
+  const ticker = getValue()
+
   return (
     <td className="group relative">
       <div
@@ -23,20 +25,27 @@ export function TickerCell({ getValue, row }: CellContext<Ticker, string>) {
       <LinkBox asChild>
         <div className="group flex flex-row items-center gap-x-1.5 px-4 py-1.5">
           <div className="size-3.5 overflow-hidden rounded-sm">
-            <img
-              src={`https://img.logo.dev/ticker/${getValue()}?token=pk_Y8Ewg1JpSNuBNeYS_o2QyA&format=png&size=64&retina=true`}
-              alt={`${getValue()} logo`}
+            <object
+              type="image/png"
+              data={`https://img.logo.dev/ticker/${ticker}?token=pk_Y8Ewg1JpSNuBNeYS_o2QyA&format=png&size=64&retina=true`}
               className="size-full scale-110"
-            />
+              aria-label={`${ticker} logo`}
+            >
+              <img
+                src={`https://ui-avatars.com/api/?name=${ticker}&background=random`}
+                alt={`${ticker} logo fallback`}
+                className="size-full scale-110"
+              />
+            </object>
           </div>
           <LinkOverlay asChild>
             <a
               className="border-b font-medium text-sm leading-none transition-colors duration-100 group-hover:border-b-zinc-300 dark:border-b-white/10 dark:group-hover:border-b-white/20"
-              href={`https://finance.yahoo.com/quote/${getValue()}`}
+              href={`https://finance.yahoo.com/quote/${ticker}`}
               rel="noreferrer nofollow"
               target="_blank"
             >
-              {getValue()}
+              {ticker}
             </a>
           </LinkOverlay>
         </div>

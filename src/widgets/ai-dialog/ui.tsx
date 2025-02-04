@@ -93,7 +93,7 @@ export function AiDialog({
                   </ol>
                 ),
                 li: ({ children }) => <li>{children}</li>,
-                hr: () => <hr className="bg-zinc-200 dark:bg-zinc-800" />,
+                hr: () => <hr className="my-4 bg-zinc-200 dark:bg-zinc-800" />,
               }}
             />
           )}
