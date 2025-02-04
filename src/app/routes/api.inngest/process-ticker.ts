@@ -53,6 +53,10 @@ export const processTicker = inngest.createFunction(
         continue
       }
 
+      if (!(current.currency && previous.currency)) {
+        continue
+      }
+
       const metrics = calculateMetrics(current, previous)
 
       await database
@@ -76,7 +80,7 @@ export const processTicker = inngest.createFunction(
             symbol: ticker,
             reportPeriod: item.report_period,
             period: item.period,
-            currency: item.currency,
+            currency: item.currency!,
             revenue: item.revenue,
             ebit: item.ebit,
             capitalExpenditure: item.capital_expenditure,

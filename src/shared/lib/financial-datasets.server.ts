@@ -310,7 +310,7 @@ export class FinancialDatasetsClient {
             ticker: string
             report_period: string
             period: FinancialDatasetsPeriod
-            currency: string
+            currency: string | null
           } & {
             [key in T[number]]: number
           })[]
