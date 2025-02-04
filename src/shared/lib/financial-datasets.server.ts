@@ -298,6 +298,10 @@ export class FinancialDatasetsClient {
         limit,
         period,
       }),
+      ttl:
+        period === "annual"
+          ? 60 * 60 * 24 * 365 // 1 year
+          : 60 * 60 * 24 * 90, // 3 months
       cache: this.cache,
       getFreshValue: () =>
         this.makeRequest<{
