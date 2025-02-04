@@ -47,8 +47,8 @@ export function AiDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {children}
       <DialogContent>
+        {children}
         <ScrollArea className="max-h-[calc(100vh-10rem)]">
           {isLoading ? (
             <div className="flex h-5 w-full min-w-0 flex-row items-center justify-start gap-x-2 overflow-hidden whitespace-nowrap text-sm text-zinc-500">

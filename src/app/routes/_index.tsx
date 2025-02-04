@@ -101,7 +101,7 @@ export default function IndexPage({
         setIsOpen={setIsAiCompareDialogOpen}
         isLoading={isLoading}
       >
-        <DialogTitle>AI Stock Comparison</DialogTitle>
+        <DialogTitle className="sr-only">AI Stock Comparison</DialogTitle>
       </AiDialog>
     </>
   )
