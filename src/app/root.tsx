@@ -11,17 +11,6 @@ import type { ReactNode } from "react"
 import type { Route } from "./+types/root"
 import "./app.css"
 
-export const meta: Route.MetaFunction = () => [
-  {
-    property: "og:image",
-    content: "https://simple-stock-screener.ctoofeverything.dev/og.jpg",
-  },
-  {
-    property: "twitter:image",
-    content: "https://simple-stock-screener.ctoofeverything.dev/og.jpg",
-  },
-]
-
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -55,6 +44,18 @@ export function Layout({ children }: { children: ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          property="og:image"
+          content="https://simple-stock-screener.ctoofeverything.dev/og.jpg"
+        />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:image"
+          content="https://simple-stock-screener.ctoofeverything.dev/og.jpg"
+        />
 
         <Meta />
         <Links />

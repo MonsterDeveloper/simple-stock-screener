@@ -7,7 +7,7 @@ import { useCompletion } from "ai/react"
 import { useState } from "react"
 import type { Route } from "./+types/_index"
 
-export const meta = () => [
+export const meta: Route.MetaFunction = () => [
   { title: "Simple Stock Screener" },
   {
     name: "description",
