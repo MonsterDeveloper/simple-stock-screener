@@ -283,7 +283,8 @@ function FilterValueInput({ column }: { column: Column<Ticker> }) {
         onChange={(event) => {
           column.setFilterValue({
             operator: filterValue.operator,
-            value: event.target.value,
+            value:
+              event.target.value.length > 0 ? event.target.value : undefined,
           })
         }}
       />

@@ -4,22 +4,48 @@ import type { Row } from "@tanstack/react-table"
 export const textFilterFn = (
   row: Row<Ticker>,
   columndId: string,
-  filterValue: FilterValue,
+  filterValue: TextFilterValue,
 ) => {
+  // Inactive filter
+  if (filterValue.value === undefined) {
+    return true
+  }
+
   const value = row.original[columndId as keyof typeof row.original]
 
   if (typeof value !== "string") {
     return false
   }
 
-  return value.includes(String(filterValue))
+  if (filterValue.operator === "contains") {
+    return value.toLowerCase().includes(filterValue.value.toLowerCase())
+  }
+
+  if (filterValue.operator === "notContains") {
+    return !value.toLowerCase().includes(filterValue.value.toLowerCase())
+  }
+
+  if (filterValue.operator === "eq") {
+    return value.toLowerCase() === filterValue.value.toLowerCase()
+  }
+
+  if (filterValue.operator === "ne") {
+    return value.toLowerCase() !== filterValue.value.toLowerCase()
+  }
+
+  throw new Error(`Unknown filter operator: ${filterValue.operator}`)
 }
 
 export const numberFilterFn = (
   row: Row<Ticker>,
   columndId: string,
-  filterValue: FilterValue,
+  filterValue: NumberFilterValue,
 ) => {
+  // Inactive filter
+  if (filterValue.value === undefined) {
+    return true
+  }
+
   const value = row.original[columndId as keyof typeof row.original]
 
   if (typeof value !== "number" || !filterValue.value) {
