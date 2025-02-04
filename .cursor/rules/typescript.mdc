@@ -6,7 +6,7 @@ globs: *.ts, *.tsx
 Write clean and concise TypeScript code. It should be maintainable, testable, and follow the best modern coding practices.
 
 Follow these rules:
-- Prefer descriptive names: `previous` instead of `prev`, `database` instead of `db`, and so on.
+- Prefer descriptive names: `previous` instead of `prev`, `database` instead of `db`, and so on. Don't use single letters for variable names and symbols.
 - Follow the TSConfig from the [tsconfig.cloudflare.json](mdc:tsconfig.cloudflare.json)
 - Rely on implicit types and TS type inference.
 - Don't specify the return type explicitly unless absolutely neccessary.
