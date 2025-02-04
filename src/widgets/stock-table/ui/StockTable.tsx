@@ -5,11 +5,13 @@ import { DropdownMenuTrigger } from "@/shared/ui/dropdown-menu"
 import { IconFilter } from "@tabler/icons-react"
 import {
   type ColumnFiltersState,
+  type PaginationState,
   type RowSelectionState,
   type SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
@@ -20,6 +22,7 @@ import { SelectionActions } from "./SelectionActions"
 import { TableActions } from "./TableActions"
 import { TableFilter } from "./TableFilter"
 import { TableHeader } from "./TableHeader"
+import { PAGE_SIZES, TablePagination } from "./TablePagination"
 import { TableSearch } from "./TableSearch"
 import { TableSort } from "./TableSort"
 
@@ -80,6 +83,10 @@ export function StockTable({
   ])
   const [isFiltersOpen, setIsFiltersOpen] = useState(true)
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: PAGE_SIZES[0],
+  })
   const [searchQuery, setSearchQuery] = useState("")
   const [isSortPopoverOpen, setIsSortPopoverOpen] = useState(false)
 
@@ -97,15 +104,18 @@ export function StockTable({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
     enableRowSelection: true,
     state: {
       sorting,
       columnFilters,
       rowSelection,
       globalFilter: searchQuery,
+      pagination,
     },
   })
 
@@ -170,6 +180,7 @@ export function StockTable({
           </tbody>
         </table>
       </div>
+      <TablePagination table={table} />
       <SelectionActions
         table={table}
         onAiCompareButtonClick={onAiCompareButtonClick}
