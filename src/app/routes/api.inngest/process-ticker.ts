@@ -6,7 +6,7 @@ export const processTicker = inngest.createFunction(
   {
     id: "process-ticker",
     batchEvents: {
-      maxSize: 25,
+      maxSize: 5,
       timeout: "30s",
     },
   },
