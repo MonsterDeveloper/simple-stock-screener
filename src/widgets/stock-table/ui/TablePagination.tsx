@@ -171,6 +171,7 @@ export function TablePagination({ table }: { table: Table<Ticker> }) {
         variant="secondary"
         disabled={!table.getCanPreviousPage()}
         onClick={() => table.previousPage()}
+        aria-label="Previous page"
       >
         <IconChevronLeft className="size-4" />
       </Button>
@@ -181,6 +182,7 @@ export function TablePagination({ table }: { table: Table<Ticker> }) {
         variant="secondary"
         disabled={!table.getCanNextPage()}
         onClick={() => table.nextPage()}
+        aria-label="Next page"
       >
         <IconChevronRight className="size-4" />
       </Button>

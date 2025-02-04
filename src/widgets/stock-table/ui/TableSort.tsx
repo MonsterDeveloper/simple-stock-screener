@@ -25,7 +25,7 @@ export function TableSort({
         <DropdownMenu>
           <TooltipTrigger asChild>
             <DropdownMenuTrigger asChild>
-              <Button variant="tertiary" className="w-7 px-0">
+              <Button variant="tertiary" className="w-7 px-0" aria-label="Sort">
                 <IconArrowsSort className="size-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -60,6 +60,7 @@ export function TableSort({
             onClick={() => {
               setIsSortPopoverOpen(true)
             }}
+            aria-label="Sort"
           >
             <IconArrowsSort className="size-4 text-blue-500" />
           </Button>

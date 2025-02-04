@@ -37,7 +37,7 @@ export function TableSearch({ value, className, ...props }: TableSearchProps) {
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            aria-label="Поиск"
+            aria-label="Search"
             onClick={handleClick}
             variant="tertiary"
             className="w-7 px-0"

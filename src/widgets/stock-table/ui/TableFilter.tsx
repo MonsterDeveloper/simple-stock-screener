@@ -34,6 +34,7 @@ export function TableFilter({
           variant="tertiary"
           className="w-7 px-0"
           onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+          aria-label="Filter"
         >
           <IconFilter
             className={cn(

@@ -20,6 +20,7 @@ export function TickerCell({ getValue, row }: CellContext<Ticker, string>) {
           onCheckedChange={() => {
             row.toggleSelected()
           }}
+          aria-label={`Select ${ticker}`}
         />
       </div>
       <LinkBox asChild>
