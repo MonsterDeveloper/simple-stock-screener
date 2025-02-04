@@ -1,10 +1,12 @@
 import { ClientOnly } from "@/shared/ui/client-only"
 import { DialogTitle } from "@/shared/ui/dialog"
+import { Skeleton } from "@/shared/ui/skeleton"
 import { AiDialog } from "@/widgets/ai-dialog"
 import { StockTable } from "@/widgets/stock-table"
 import { IconBrandGithub, IconExternalLink } from "@tabler/icons-react"
 import { useCompletion } from "ai/react"
-import { useState } from "react"
+import { Suspense, useState } from "react"
+import { Await } from "react-router"
 import type { Route } from "./+types/_index"
 
 export const meta: Route.MetaFunction = () => [
@@ -16,14 +18,14 @@ export const meta: Route.MetaFunction = () => [
   },
 ]
 
-export async function loader({ context }: Route.LoaderArgs) {
-  const tickers = await context.database.query.tickersTable.findMany({
-    with: {
-      metrics: true,
-    },
-  })
-
-  return { tickers }
+export function loader({ context }: Route.LoaderArgs) {
+  return {
+    tickers: context.database.query.tickersTable.findMany({
+      with: {
+        metrics: true,
+      },
+    }),
+  }
 }
 
 export default function IndexPage({
@@ -60,16 +62,22 @@ export default function IndexPage({
           @QCompounding on X{" "}
           <IconExternalLink className="ml-0.5 inline-block size-4 align-middle" />
         </a>
-        <StockTable
-          tickers={tickers}
-          onSelectedTickersChange={(tickers) => {
-            setInput(tickers.join(";"))
-          }}
-          onAiCompareButtonClick={() => {
-            handleSubmit()
-            setIsAiCompareDialogOpen(true)
-          }}
-        />
+        <Suspense fallback={<Skeleton className="mt-8 h-96 w-full" />}>
+          <Await resolve={tickers}>
+            {(tickers) => (
+              <StockTable
+                tickers={tickers}
+                onSelectedTickersChange={(tickers) => {
+                  setInput(tickers.join(";"))
+                }}
+                onAiCompareButtonClick={() => {
+                  handleSubmit()
+                  setIsAiCompareDialogOpen(true)
+                }}
+              />
+            )}
+          </Await>
+        </Suspense>
       </main>
 
       <footer className="mx-auto mt-auto flex max-w-6xl flex-row items-center justify-between pb-4 text-xs text-zinc-500">
