@@ -27,7 +27,7 @@ export function TickerCell({ getValue, row }: CellContext<Ticker, string>) {
           <div className="size-3.5 overflow-hidden rounded-sm">
             <object
               type="image/png"
-              data={`https://img.logo.dev/ticker/${ticker}?token=pk_Y8Ewg1JpSNuBNeYS_o2QyA&format=png&size=64&retina=true`}
+              data={`https://img.logo.dev/ticker/${ticker}?token=pk_Y8Ewg1JpSNuBNeYS_o2QyA&format=webp&size=64&retina=true`}
               className="size-full scale-110"
               aria-label={`${ticker} logo`}
             >
