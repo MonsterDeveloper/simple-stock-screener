@@ -141,29 +141,36 @@ type SearchResult = {
 
 function calculateMetrics(current: SearchResult, previous: SearchResult) {
   // Revenue Growth
-  const revenueGrowthPercentage = (current.revenue / previous.revenue - 1) * 100
+  const revenueGrowthPercentage =
+    previous.revenue === 0 ? 0 : (current.revenue / previous.revenue - 1) * 100
 
   // Earnings Growth
   const earningsGrowthPercentage =
-    (current.net_income / previous.net_income - 1) * 100
+    previous.net_income === 0
+      ? 0
+      : (current.net_income / previous.net_income - 1) * 100
 
   // FCF / Earnings
   const fcf =
     current.net_cash_flow_from_operations - current.capital_expenditure
-  const fcfEarningsRatio = (fcf / current.net_income) * 100
+  const fcfEarningsRatio =
+    current.net_income === 0 ? 0 : (fcf / current.net_income) * 100
 
   // ROIC
   const nopat = current.ebit - current.income_tax_expense
   const investedCapital = current.total_debt + current.shareholders_equity
-  const roic = (nopat / investedCapital) * 100
+  const roic = investedCapital === 0 ? 0 : (nopat / investedCapital) * 100
 
   // Net Debt / FCF
   const netDebt = current.total_debt - current.cash_and_equivalents
   // using FCF as a proxy for FCFF in this simplified model
-  const netDebtToFcff = netDebt / fcf
+  const netDebtToFcff = fcf === 0 ? 0 : netDebt / fcf
 
   // Debt / Equity
-  const debtToEquity = (current.total_debt / current.shareholders_equity) * 100
+  const debtToEquity =
+    current.shareholders_equity === 0
+      ? 0
+      : (current.total_debt / current.shareholders_equity) * 100
 
   return {
     revenueGrowthPercentage,
