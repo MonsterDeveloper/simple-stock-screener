@@ -1,0 +1,230 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "33398ec4-e34c-4586-8ac0-3bcaca6f759c",
+  "prevId": "c38fd4a3-7195-4db5-baf5-2941cf756f66",
+  "tables": {
+    "ticker_metric_data": {
+      "name": "ticker_metric_data",
+      "columns": {
+        "ticker_id": {
+          "name": "ticker_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "report_period": {
+          "name": "report_period",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "period": {
+          "name": "period",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "currency": {
+          "name": "currency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "revenue": {
+          "name": "revenue",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "net_income": {
+          "name": "net_income",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "net_cash_flow_from_operations": {
+          "name": "net_cash_flow_from_operations",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "capital_expenditure": {
+          "name": "capital_expenditure",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ebit": {
+          "name": "ebit",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "income_tax_expense": {
+          "name": "income_tax_expense",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "total_debt": {
+          "name": "total_debt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "cash_and_equivalents": {
+          "name": "cash_and_equivalents",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "shareholders_equity": {
+          "name": "shareholders_equity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ticker_metric_data_ticker_id_tickers_symbol_fk": {
+          "name": "ticker_metric_data_ticker_id_tickers_symbol_fk",
+          "tableFrom": "ticker_metric_data",
+          "tableTo": "tickers",
+          "columnsFrom": [
+            "ticker_id"
+          ],
+          "columnsTo": [
+            "symbol"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "ticker_metric_data_ticker_id_report_period_pk": {
+          "columns": [
+            "ticker_id",
+            "report_period"
+          ],
+          "name": "ticker_metric_data_ticker_id_report_period_pk"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "tickers": {
+      "name": "tickers",
+      "columns": {
+        "symbol": {
+          "name": "symbol",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "revenue_growth_percentage": {
+          "name": "revenue_growth_percentage",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "earnings_growth_percentage": {
+          "name": "earnings_growth_percentage",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fcf_earnings_ratio": {
+          "name": "fcf_earnings_ratio",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "roic": {
+          "name": "roic",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "net_debt_to_fcf": {
+          "name": "net_debt_to_fcf",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "debt_to_equity": {
+          "name": "debt_to_equity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

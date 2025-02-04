@@ -3,8 +3,6 @@ import { integer, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core"
 
 export const tickersTable = sqliteTable("tickers", {
   symbol: text("symbol").primaryKey(),
-  name: text("name").notNull(),
-  exchange: text("exchange").notNull(),
   revenueGrowthPercentage: integer("revenue_growth_percentage").notNull(),
   earningsGrowthPercentage: integer("earnings_growth_percentage").notNull(),
   fcfEarningsRatio: integer("fcf_earnings_ratio").notNull(),
