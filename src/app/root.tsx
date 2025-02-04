@@ -36,6 +36,16 @@ export const links: Route.LinksFunction = () => [
     rel: "apple-touch-icon",
     href: "/apple-touch-icon.png",
   },
+  {
+    rel: "image",
+    href: "https://simple-stock-screener.ctoofeverything.dev/og.jpg",
+    property: "og:image",
+  },
+  {
+    rel: "image",
+    href: "https://simple-stock-screener.ctoofeverything.dev/og.jpg",
+    property: "twitter:image",
+  },
 ]
 
 export function Layout({ children }: { children: ReactNode }) {
