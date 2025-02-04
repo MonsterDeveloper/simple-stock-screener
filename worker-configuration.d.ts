@@ -6,5 +6,7 @@ interface Env {
 	ACCOUNT_ID: string;
 	AI_GATEWAY_ID: string;
 	AI_GATEWAY_TOKEN: string;
+	INNGEST_SIGNING_KEY: string;
+	INNGEST_EVENT_KEY: string;
 	DB: D1Database;
 }

@@ -18,6 +18,10 @@ declare module "react-router" {
       env: CloudflareEnvironment
       ctx: Omit<ExecutionContext, "props">
     }
+    env: Pick<
+      CloudflareEnvironment,
+      "INNGEST_EVENT_KEY" | "INNGEST_SIGNING_KEY"
+    > // Fix for Inngest `serve`
     database: DrizzleD1Database<typeof schema>
     openai: OpenAIProvider
     financialDatasets: FinancialDatasetsClient
@@ -46,6 +50,10 @@ export function getLoadContext({
 
   return {
     cloudflare: context.cloudflare,
+    env: {
+      INNGEST_EVENT_KEY: context.cloudflare.env.INNGEST_EVENT_KEY,
+      INNGEST_SIGNING_KEY: context.cloudflare.env.INNGEST_SIGNING_KEY,
+    },
     database,
     openai,
     financialDatasets,
