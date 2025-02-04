@@ -41,6 +41,6 @@
     "noEmit": true,
 
     /* If your code runs in the DOM: */
-    "lib": ["es2024", "dom", "dom.iterable"]
+    "lib": ["esnext", "dom", "dom.iterable"]
   }
 }

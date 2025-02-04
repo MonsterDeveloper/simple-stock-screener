@@ -5,13 +5,36 @@ export const scheduledProcessing = inngest.createFunction(
     id: "scheduled-ticker-processing",
   },
   {
+    // TODO implement smart scheduling based on company filings date
     cron: "TZ=Europe/Berlin 00 10 1 2 *", // every 1st of February at 10:00 AM
   },
-  async () => {
-    const nasdaqTickers = await getNasdaqTickers()
-    const nyseTickers = await getNyseTickers()
+  async ({ financialDatasets, step }) => {
+    const [nasdaqTickers, nyseTickers, { tickers: financialDatasetsTickers }] =
+      await Promise.all([
+        getNasdaqTickers(),
+        getNyseTickers(),
+        financialDatasets.getAvailableTickers(),
+      ])
 
-    return nasdaqTickers.length + nyseTickers.length
+    const commonTickers = new Set([...nasdaqTickers, ...nyseTickers])
+    const supportedTickers = new Set(financialDatasetsTickers)
+
+    const tickersToProcess = supportedTickers.intersection(commonTickers)
+
+    // Select 50 random tickers
+    const selectedTickers = Array.from(tickersToProcess)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 50)
+
+    await step.sendEvent(
+      "send-events",
+      selectedTickers.map((ticker) => ({
+        name: "ticker.process",
+        data: {
+          ticker,
+        },
+      })),
+    )
   },
 )
 
