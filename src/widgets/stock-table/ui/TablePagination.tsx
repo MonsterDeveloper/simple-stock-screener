@@ -11,14 +11,16 @@ import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react"
 import type { Table } from "@tanstack/react-table"
 import type { ComponentPropsWithoutRef, ReactNode } from "react"
 
-export const PAGE_SIZES = [1, 5, 10, 20, 50, 100] as const
+export const PAGE_SIZES = [10, 20, 50, 100] as const
 
-interface PageButtonProps extends ComponentPropsWithoutRef<"button"> {
+function PageButton({
+  active,
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"button"> & {
   active?: boolean
   children: ReactNode
-}
-
-function PageButton({ active, className, ...props }: PageButtonProps) {
+}) {
   return (
     <Button
       variant="secondary"
