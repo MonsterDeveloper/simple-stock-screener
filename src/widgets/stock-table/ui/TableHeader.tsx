@@ -8,7 +8,7 @@ export function TableHeader({
   return (
     <thead>
       {table.getHeaderGroups().map((headerGroup) => (
-        <tr key={headerGroup.id} className="border-b dark:border-b-white/10">
+        <tr key={headerGroup.id} className="border-b-2 dark:border-b-white/10">
           {headerGroup.headers.map((header, index, headers) => (
             <th
               key={header.id}
