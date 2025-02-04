@@ -37,7 +37,7 @@ export default function IndexPage({
 
   return (
     <>
-      <main className="mx-auto min-h-[calc(100vh-32px)] max-w-6xl px-4 pt-40">
+      <main className="mx-auto min-h-[calc(100vh-34px)] max-w-6xl px-4 pt-40">
         <h1 className="font-bold text-3xl">Simple Stock Screener</h1>
 
         <p className="mt-5 text-sm">
