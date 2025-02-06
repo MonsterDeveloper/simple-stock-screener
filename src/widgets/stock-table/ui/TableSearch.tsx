@@ -2,7 +2,7 @@ import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/ui/cn"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip"
 import { IconSearch } from "@tabler/icons-react"
-import { useRef } from "react"
+import { type KeyboardEvent, useRef } from "react"
 
 import { useState } from "react"
 
@@ -18,16 +18,26 @@ interface TableSearchProps
 export function TableSearch({ value, className, ...props }: TableSearchProps) {
   const [isOpen, setIsOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null!)
+  const isActive = typeof value === "string" && value.length > 0
 
   const handleClick = () => {
     flushSync(() => {
-      setIsOpen(true)
+      setIsOpen((open) => !open)
     })
     inputRef.current.focus()
+    // Move cursor to end by setting selection range to end
+    const length = inputRef.current.value.length
+    inputRef.current.setSelectionRange(length, length)
   }
 
   const handleBlur = () => {
-    if (typeof value === "string" && value.length === 0) {
+    if (!isActive) {
+      setIsOpen(false)
+    }
+  }
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Escape") {
       setIsOpen(false)
     }
   }
@@ -40,7 +50,7 @@ export function TableSearch({ value, className, ...props }: TableSearchProps) {
             aria-label="Search"
             onClick={handleClick}
             variant="tertiary"
-            className="w-7 px-0"
+            className={cn("w-7 px-0", isActive && !isOpen && "text-blue-500")}
           >
             <IconSearch size={16} />
           </Button>
@@ -58,6 +68,7 @@ export function TableSearch({ value, className, ...props }: TableSearchProps) {
           tabIndex={-1}
           ref={inputRef}
           onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
           value={value}
           {...props}
         />
