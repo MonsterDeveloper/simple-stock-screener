@@ -23,6 +23,10 @@ export function ActiveFilters({
   isSortPopoverOpen: boolean
   setIsSortPopoverOpen: (isSortPopoverOpen: boolean) => void
 }) {
+  const canAddFilter = table
+    .getAllFlatColumns()
+    .some((column) => column.getCanFilter() && !column.getIsFiltered())
+
   return (
     <div
       className={cn(
@@ -65,14 +69,16 @@ export function ActiveFilters({
             ),
         )}
       </AnimatePresence>
-      <AddFilterDropdown table={table} setIsFiltersOpen={setIsFiltersOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="tertiary" className="px-1.5">
-            <IconPlus className="mr-1.5 size-4 " />
-            Add filter
-          </Button>
-        </DropdownMenuTrigger>
-      </AddFilterDropdown>
+      {canAddFilter && (
+        <AddFilterDropdown table={table} setIsFiltersOpen={setIsFiltersOpen}>
+          <DropdownMenuTrigger asChild>
+            <Button variant="tertiary" className="px-1.5">
+              <IconPlus className="mr-1.5 size-4 " />
+              Add filter
+            </Button>
+          </DropdownMenuTrigger>
+        </AddFilterDropdown>
+      )}
     </div>
   )
 }
