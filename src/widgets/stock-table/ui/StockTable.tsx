@@ -118,6 +118,7 @@ export function StockTable({
       pagination,
     },
   })
+  const isEmpty = table.getRowModel().rows.length === 0
 
   return (
     <>
@@ -179,8 +180,22 @@ export function StockTable({
             ))}
           </tbody>
         </table>
+        {isEmpty && (
+          <div className="mt-8 flex flex-col items-center justify-center gap-y-1">
+            <img src="/no-tickers.svg" className="size-32 dark:hidden" alt="" />
+            <img
+              src="/no-tickers-dark.svg"
+              className="hidden size-32 dark:block"
+              alt=""
+            />
+            <h2 className="mt-3 font-bold text-2xl">No tickers found</h2>
+            <p className="text-sm text-zinc-500">
+              Try relaxing the filters or search query
+            </p>
+          </div>
+        )}
       </div>
-      <TablePagination table={table} />
+      {!isEmpty && <TablePagination table={table} />}
       <SelectionActions
         table={table}
         onAiCompareButtonClick={onAiCompareButtonClick}

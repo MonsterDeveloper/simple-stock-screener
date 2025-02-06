@@ -36,7 +36,7 @@ export function ActiveFilters({
       )}
       type="auto"
       nonViewportChildren={
-        <div className="absolute inset-y-0 right-0 w-4.5 bg-gradient-to-r from-0% from-white/0 to-100% to-white" />
+        <div className="absolute inset-y-0 right-0 w-4.5 bg-gradient-to-r from-0% from-white/0 to-100% to-white dark:from-zinc-900/0 dark:to-zinc-900" />
       }
     >
       <div className="flex flex-row items-center justify-start gap-1 pr-4">

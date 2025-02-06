@@ -18,6 +18,36 @@ export const meta: Route.MetaFunction = () => [
   },
 ]
 
+export const links: Route.LinksFunction = () => [
+  {
+    rel: "preload",
+    as: "image",
+    href: "/no-tickers.svg",
+  },
+  {
+    rel: "preload",
+    as: "image",
+    href: "/no-tickers-dark.svg",
+  },
+  {
+    rel: "preconnect",
+    href: "https://img.logo.dev",
+  },
+  {
+    rel: "preconnect",
+    href: "https://ui-avatars.com",
+  },
+  // DNS-prefetch as fallback for browsers that don't support preconnect
+  {
+    rel: "dns-prefetch",
+    href: "https://img.logo.dev",
+  },
+  {
+    rel: "dns-prefetch",
+    href: "https://ui-avatars.com",
+  },
+]
+
 export function loader({ context }: Route.LoaderArgs) {
   return {
     tickers: context.database.query.tickersTable
