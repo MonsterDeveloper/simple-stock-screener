@@ -158,7 +158,7 @@ export function StockTable({
         isSortPopoverOpen={isSortPopoverOpen}
         setIsSortPopoverOpen={setIsSortPopoverOpen}
       />
-      <div className="mt-6">
+      <div>
         <table className="h-px w-full table-fixed">
           <TableHeader table={table} />
           <tbody>

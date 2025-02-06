@@ -2,6 +2,7 @@ import type { Ticker } from "@/entities/ticker"
 import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/ui/cn"
 import { DropdownMenuTrigger } from "@/shared/ui/dropdown-menu"
+import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area"
 import { Separator } from "@/shared/ui/separator"
 import { IconPlus } from "@tabler/icons-react"
 import type { Table } from "@tanstack/react-table"
@@ -28,57 +29,64 @@ export function ActiveFilters({
     .some((column) => column.getCanFilter() && !column.getIsFiltered())
 
   return (
-    <div
+    <ScrollArea
       className={cn(
-        "mt-2 flex flex-row flex-wrap items-center justify-start gap-1",
+        "mb-3 whitespace-nowrap pt-3 pb-5",
         !isFiltersOpen && "hidden",
       )}
+      type="auto"
+      nonViewportChildren={
+        <div className="absolute inset-y-0 right-0 w-4.5 bg-gradient-to-r from-0% from-white/0 to-100% to-white" />
+      }
     >
-      <SortPopover
-        table={table}
-        isSortPopoverOpen={isSortPopoverOpen}
-        setIsSortPopoverOpen={setIsSortPopoverOpen}
-      />
+      <div className="flex flex-row items-center justify-start gap-1 pr-4">
+        <SortPopover
+          table={table}
+          isSortPopoverOpen={isSortPopoverOpen}
+          setIsSortPopoverOpen={setIsSortPopoverOpen}
+        />
 
-      {table.getAllFlatColumns().filter((column) => column.getIsFiltered())
-        .length > 0 &&
-        table.getState().sorting.length > 0 && (
-          <Separator orientation="vertical" className="mx-3 h-6" />
-        )}
+        {table.getAllFlatColumns().filter((column) => column.getIsFiltered())
+          .length > 0 &&
+          table.getState().sorting.length > 0 && (
+            <Separator orientation="vertical" className="mx-3 h-6" />
+          )}
 
-      <AnimatePresence>
-        {table.getAllFlatColumns().map(
-          (column) =>
-            column.getIsFiltered() && (
-              <motion.div
-                key={column.id}
-                exit={{
-                  width: 0,
-                  overflow: "hidden",
-                  transition: {
-                    duration: 0.27,
-                    ease: [0.25, 1, 0.5, 1],
-                    overflow: {
-                      duration: 0,
+        <AnimatePresence>
+          {table.getAllFlatColumns().map(
+            (column) =>
+              column.getIsFiltered() && (
+                <motion.div
+                  key={column.id}
+                  exit={{
+                    width: 0,
+                    overflow: "hidden",
+                    transition: {
+                      duration: 0.27,
+                      ease: [0.25, 1, 0.5, 1],
+                      overflow: {
+                        duration: 0,
+                      },
                     },
-                  },
-                }}
-              >
-                <FilterPill column={column} />
-              </motion.div>
-            ),
+                  }}
+                >
+                  <FilterPill column={column} />
+                </motion.div>
+              ),
+          )}
+        </AnimatePresence>
+        {canAddFilter && (
+          <AddFilterDropdown table={table} setIsFiltersOpen={setIsFiltersOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="tertiary" className="px-1.5">
+                <IconPlus className="mr-1.5 size-4 " />
+                Add filter
+              </Button>
+            </DropdownMenuTrigger>
+          </AddFilterDropdown>
         )}
-      </AnimatePresence>
-      {canAddFilter && (
-        <AddFilterDropdown table={table} setIsFiltersOpen={setIsFiltersOpen}>
-          <DropdownMenuTrigger asChild>
-            <Button variant="tertiary" className="px-1.5">
-              <IconPlus className="mr-1.5 size-4 " />
-              Add filter
-            </Button>
-          </DropdownMenuTrigger>
-        </AddFilterDropdown>
-      )}
-    </div>
+      </div>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
   )
 }

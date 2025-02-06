@@ -3,14 +3,17 @@ import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
 import {
   type ComponentPropsWithoutRef,
   type ComponentRef,
+  type ReactNode,
   forwardRef,
 } from "react"
 import { cn } from "./cn"
 
 const ScrollArea = forwardRef<
   ComponentRef<typeof ScrollAreaPrimitive.Root>,
-  ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root>
->(({ className, children, ...props }, ref) => (
+  ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> & {
+    nonViewportChildren?: ReactNode
+  }
+>(({ className, children, nonViewportChildren, ...props }, ref) => (
   <ScrollAreaPrimitive.Root
     ref={ref}
     className={cn("relative overflow-hidden", className)}
@@ -19,6 +22,7 @@ const ScrollArea = forwardRef<
     <ScrollAreaPrimitive.Viewport className="h-full w-full rounded-[inherit]">
       {children}
     </ScrollAreaPrimitive.Viewport>
+    {nonViewportChildren}
     <ScrollBar />
     <ScrollAreaPrimitive.Corner />
   </ScrollAreaPrimitive.Root>
