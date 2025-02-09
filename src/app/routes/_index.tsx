@@ -73,7 +73,7 @@ export default function IndexPage({
 
   return (
     <>
-      <main className="mx-auto min-h-[calc(100vh-34px)] max-w-6xl px-4 pt-40">
+      <main className="mx-auto min-h-[calc(100vh-34px)] max-w-6xl px-4 pt-32 sm:pt-40">
         <h1 className="font-bold text-3xl">Simple Stock Screener</h1>
 
         <p className="mt-5 text-sm">
@@ -112,7 +112,7 @@ export default function IndexPage({
         </Suspense>
       </main>
 
-      <footer className="mx-auto mt-auto flex max-w-6xl flex-row items-center justify-between pb-4 text-xs text-zinc-500">
+      <footer className="mx-auto mt-auto flex max-w-6xl flex-col items-center justify-between gap-y-2 p-4 text-xs text-zinc-500 sm:flex-row">
         <span>
           Copyright &copy; <ClientOnly>{new Date().getFullYear()}</ClientOnly>{" "}
           CTO of Everything

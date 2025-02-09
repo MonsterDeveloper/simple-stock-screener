@@ -2,6 +2,7 @@ import type { Ticker } from "@/entities/ticker"
 import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/ui/cn"
 import { DropdownMenuTrigger } from "@/shared/ui/dropdown-menu"
+import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area"
 import { IconFilter } from "@tabler/icons-react"
 import {
   type ColumnFiltersState,
@@ -159,8 +160,8 @@ export function StockTable({
         isSortPopoverOpen={isSortPopoverOpen}
         setIsSortPopoverOpen={setIsSortPopoverOpen}
       />
-      <div>
-        <table className="h-px w-full table-fixed">
+      <ScrollArea className="pb-6">
+        <table className="h-px w-max min-w-full table-fixed whitespace-nowrap ">
           <TableHeader table={table} />
           <tbody>
             {table.getRowModel().rows.map((row) => (
@@ -194,8 +195,9 @@ export function StockTable({
             </p>
           </div>
         )}
-      </div>
-      {!isEmpty && <TablePagination table={table} />}
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+      {!isEmpty && <TablePagination table={table} className="mt-3" />}
       <SelectionActions
         table={table}
         onAiCompareButtonClick={onAiCompareButtonClick}

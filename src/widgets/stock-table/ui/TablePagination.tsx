@@ -34,7 +34,11 @@ function PageButton({
   )
 }
 
-export function TablePagination({ table }: { table: Table<Ticker> }) {
+export function TablePagination({
+  table,
+  className,
+  ...props
+}: { table: Table<Ticker> } & ComponentPropsWithoutRef<"div">) {
   const currentPage = table.getState().pagination.pageIndex + 1
   const pageCount = table.getPageCount()
 
@@ -166,7 +170,7 @@ export function TablePagination({ table }: { table: Table<Ticker> }) {
   }
 
   return (
-    <div className="mt-5 flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", className)} {...props}>
       <Button
         variant="secondary"
         disabled={!table.getCanPreviousPage()}
