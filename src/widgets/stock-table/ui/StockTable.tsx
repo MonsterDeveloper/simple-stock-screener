@@ -160,7 +160,7 @@ export function StockTable({
         isSortPopoverOpen={isSortPopoverOpen}
         setIsSortPopoverOpen={setIsSortPopoverOpen}
       />
-      <ScrollArea className="pb-6">
+      <ScrollArea className="-ml-8 pb-6" viewportProps={{ className: "pl-8" }}>
         <table className="h-px w-max min-w-full table-fixed whitespace-nowrap ">
           <TableHeader table={table} />
           <tbody>
