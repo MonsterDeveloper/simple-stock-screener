@@ -3,7 +3,7 @@
 interface Env {
 	CACHE: KVNamespace;
 	FINANCIAL_DATASETS_API_KEY: string;
-	OPENAI_API_KEY: string;
+	GROQ_API_KEY: string;
 	ACCOUNT_ID: string;
 	AI_GATEWAY_ID: string;
 	AI_GATEWAY_TOKEN: string;

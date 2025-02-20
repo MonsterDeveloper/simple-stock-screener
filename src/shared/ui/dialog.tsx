@@ -49,7 +49,7 @@ const DialogContent = forwardRef<
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute top-4 right-4 rounded-xs p-1 opacity-70 ring-offset-background transition-opacity focus-visible:outline-hidden enabled:hover:cursor-pointer enabled:hover:opacity-100 disabled:pointer-events-none">
+      <DialogPrimitive.Close className="absolute top-2 right-2 rounded-xs p-1 opacity-70 ring-offset-background transition-opacity focus-visible:outline-hidden enabled:hover:cursor-pointer enabled:hover:opacity-100 disabled:pointer-events-none">
         <IconX className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>

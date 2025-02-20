@@ -1,6 +1,5 @@
 import type { Ticker } from "@/entities/ticker"
 import { Button } from "@/shared/ui/button"
-import { cn } from "@/shared/ui/cn"
 import { DropdownMenuTrigger } from "@/shared/ui/dropdown-menu"
 import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area"
 import { IconFilter } from "@tabler/icons-react"
@@ -9,14 +8,13 @@ import {
   type PaginationState,
   type RowSelectionState,
   type SortingState,
-  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { Fragment, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { type NumberFilterValue, columns } from "../model"
 import { ActiveFilters } from "./ActiveFilters"
 import { SelectionActions } from "./SelectionActions"
@@ -24,10 +22,10 @@ import { TableActions } from "./TableActions"
 import { TableFilter } from "./TableFilter"
 import { TableHeader } from "./TableHeader"
 import { PAGE_SIZES, TablePagination } from "./TablePagination"
+import { TableRow } from "./TableRow"
 import { TableSearch } from "./TableSearch"
 import { TableSort } from "./TableSort"
 
-// TODO implement pagination
 export function StockTable({
   tickers,
   onAiCompareButtonClick,
@@ -165,19 +163,7 @@ export function StockTable({
           <TableHeader table={table} />
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className={cn(
-                  "relative border-b dark:border-b-white/10",
-                  row.getIsSelected() && "bg-blue-500/5",
-                )}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <Fragment key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Fragment>
-                ))}
-              </tr>
+              <TableRow key={row.id} row={row} />
             ))}
           </tbody>
         </table>

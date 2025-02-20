@@ -4,7 +4,7 @@ import { type DrizzleD1Database, drizzle } from "drizzle-orm/d1"
 import * as schema from "./src/shared/lib/database"
 import { FinancialDatasetsClient } from "./src/shared/lib/financial-datasets.server"
 
-import { type OpenAIProvider, createOpenAI } from "@ai-sdk/openai"
+import { type GroqProvider, createGroq } from "@ai-sdk/groq"
 
 import type { ExecutionContext, KVNamespace } from "@cloudflare/workers-types"
 import type { AppLoadContext } from "react-router"
@@ -24,7 +24,7 @@ declare module "react-router" {
       "INNGEST_EVENT_KEY" | "INNGEST_SIGNING_KEY"
     > // Fix for Inngest `serve`
     database: DrizzleD1Database<typeof schema>
-    openai: OpenAIProvider
+    groq: GroqProvider
     financialDatasets: FinancialDatasetsClient
   }
 }
@@ -38,9 +38,9 @@ export function getLoadContext({
   context,
 }: GetLoadContextArgs): AppLoadContext {
   const database = drizzle(context.cloudflare.env.DB, { schema })
-  const openai = createOpenAI({
-    apiKey: context.cloudflare.env.OPENAI_API_KEY,
-    baseURL: `https://gateway.ai.cloudflare.com/v1/${context.cloudflare.env.ACCOUNT_ID}/${context.cloudflare.env.AI_GATEWAY_ID}/openai`,
+  const groq = createGroq({
+    apiKey: context.cloudflare.env.GROQ_API_KEY,
+    baseURL: `https://gateway.ai.cloudflare.com/v1/${context.cloudflare.env.ACCOUNT_ID}/${context.cloudflare.env.AI_GATEWAY_ID}/groq`,
     headers: {
       "cf-aig-authorization": `Bearer ${context.cloudflare.env.AI_GATEWAY_TOKEN}`,
     },
@@ -64,7 +64,7 @@ export function getLoadContext({
     },
     cache,
     database,
-    openai,
+    groq,
     financialDatasets,
   }
 }

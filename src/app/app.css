@@ -25,6 +25,18 @@
   }
 }
 
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
 html,
 body {
   @apply bg-white text-zinc-800 dark:bg-zinc-900 dark:text-white/80 dark:selection:bg-cyan-900 duration-150 transition-colors;

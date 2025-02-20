@@ -1,17 +1,12 @@
-import {
-  analyzeFundamentals,
-  analyzeSentiment,
-  analyzeTechnicals,
-  analyzeValuation,
-} from "@/features/stock-analysis"
+import { analyzeFundamentals } from "@/features/stock-analysis/fundamentals"
+import { analyzeSentiment } from "@/features/stock-analysis/sentiment"
+import { analyzeTechnicals } from "@/features/stock-analysis/technicals"
+import { analyzeValuation } from "@/features/stock-analysis/valuation"
 import { streamText } from "ai"
 import { z } from "zod"
 import type { Route } from "./+types/api.ai-compare"
 
-const systemPrompt = `
-You are a friendly but professional financial analyst.
-
-You are given the following information about multiple stock (all in JSON format):
+const instructions = `You are given the following information about multiple stock (all in JSON format):
 - Technical analysis
 - Fundamental analysis
 - Sentiment analysis
@@ -19,8 +14,10 @@ You are given the following information about multiple stock (all in JSON format
 
 Analyze the information and provide a detailed summary of each stock. Compare the stocks and provide a detailed summary of the differences.
 
-Respond in Markdown format. Include the ticker and the name of the company (if you know it) in the summary.
-`
+Respond in Markdown format. Include the ticker and the name of the company (if you know it) in the summary.`
+
+const systemPrompt =
+  "You are a friendly but professional financial analyst. Think about the user request step by step and provide a detailed summary of the results."
 
 const dataSchema = z.object({
   prompt: z
@@ -50,11 +47,15 @@ export async function action({ context, request }: Route.ActionArgs) {
   )
 
   const result = streamText({
-    model: context.openai("o1-preview"),
+    model: context.groq("deepseek-r1-distill-llama-70b"),
     system: systemPrompt,
-    prompt: analyses
-      .map(
-        ({ ticker, technicals, fundamentals, sentiment, valuation }) => `
+    temperature: 0.5,
+    maxTokens: 4096,
+    prompt:
+      instructions +
+      analyses
+        .map(
+          ({ ticker, technicals, fundamentals, sentiment, valuation }) => `
 # ${ticker}
 ## Technical analysis
 ${JSON.stringify(technicals)}
@@ -67,9 +68,9 @@ ${JSON.stringify(sentiment)}
 
 ## Valuation analysis
 ${JSON.stringify(valuation)}
-`,
-      )
-      .join("\n\n"),
+    `,
+        )
+        .join("\n\n"),
   })
 
   return result.toDataStreamResponse({
