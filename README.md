@@ -1,71 +1,70 @@
-# Welcome to React Router!
+# Simple Stock Screener
 
-A modern, production-ready template for building full-stack React applications using React Router.
+[![Bun Version](https://img.shields.io/badge/Bun-1.2.2-white)](#)
+[![Cloudflare Workers](https://img.shields.io/badge/deployed-Cloudflare_Workers-F69334)](https://simple-stock-screener.ctoofeverything.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](#)
+
+
+
+A super simple, modern, AI-powered stock screening tool with Notion-style UI. Inspired by a [tweet by QCompounding](https://x.com/QCompounding/status/1870515464801010028).
+
+Visit the live app at: [https://simple-stock-screener.ctoofeverything.dev/](https://simple-stock-screener.ctoofeverything.dev/)
 
 ## Features
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- **Multi-Dimensional Stock Analysis:**  
+  - **Fundamental Analysis:** Evaluate profitability, growth, and financial health using key metrics.
+  - **Technical Analysis:** Leverage trend following, mean reversion, momentum, and volatility indicators.
+  - **Sentiment Analysis:** Analyze insider trading and news sentiment for a comprehensive market perspective.
+  - **Valuation Analysis:** Compare market price with intrinsic value using DCF and owner earnings methods.
 
-## Getting Started
+- **AI stock comparison:**   AI tools to provide detailed summaries and comparisons between selected stocks.
 
-### Installation
+- **Optimized Performance:**  
+  - Deployed on the edge with Cloudflare Workers.
+  - Data caching and database with Cloudflare KV and D1 databases.
+  - Event-driven processing using Inngest.
 
-Install the dependencies:
+## Tech Stack
+  - React Router  
+  - TypeScript  
+  - TailwindCSS
+  - OpenAI `o1-preview` (w/ Vercel AI SDK)
+  - Cloudflare Workers
+  - Bun as a package manager  
+  - Inngest for event processing 
+  - Drizzle ORM 
+  - Financial Datasets for data 
 
-```bash
-npm install
-```
+## Installation & Development
 
-### Development
+1. **Clone the Repository:**
 
-Start the development server with HMR:
+   ```bash
+   git clone https://github.com/MonsterDeveloper/simple-stock-screener.git
+   cd simple-stock-screener
+   ```
 
-```bash
-npm run dev
-```
+2. **Install Dependencies:**
 
-Your application will be available at `http://localhost:5173`.
+   ```bash
+   bun install
+   ```
 
-## Building for Production
+3. **Start the Development Server:**
 
-Create a production build:
+   ```bash
+   bun dev
+   ```
 
-```bash
-npm run build
-```
+   Your application will be available at [http://localhost:5173](http://localhost:5173).
 
-## Deployment
+## Thanks
 
-Deployment is done using the Wrangler CLI.
+- [Compounding Quality](https://x.com/qcompounding) for the inspiration of the stock screening criteria
+- [Virat Singh](https://github.com/virattt) for his amazing work on the stock analysis implementations.
 
-To deploy directly to production:
-
-```sh
-npx wrangler deploy
-```
-
-To deploy a preview URL:
-
-```sh
-npx wrangler versions upload
-```
-
-You can then promote a version to production after verification or roll it out progressively.
-
-```sh
-npx wrangler versions deploy
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
 
 ---
 
-Built with ❤️ using React Router.
+Feel free to open issues or submit pull requests!
