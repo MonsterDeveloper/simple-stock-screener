@@ -29,7 +29,7 @@ Visit the live app at: [https://simple-stock-screener.ctoofeverything.dev/](http
   - React Router  
   - TypeScript  
   - TailwindCSS
-  - OpenAI `o1-preview` (w/ Vercel AI SDK)
+  - Groq `deepseek-r1-distill-llama-70b` (w/ Vercel AI SDK)
   - Cloudflare Workers
   - Bun as a package manager  
   - Inngest for event processing 
